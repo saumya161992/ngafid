@@ -82,30 +82,27 @@ public class ProcessFlightFile {
             //after the file has been read print out all the
             //FlightColumns
 	    //
-	    ArrayList<Row> rows = new ArrayList<>();
-	    StateDecider sd = new StateDecider();
-	    int numOfRows = columns.get(0).size();
+	    /**
+	     * creating phase array of different 
+	     * types of phases
+	     */
 
-	    /*for (int i = 0; i < numOfRows; i++) {
-		Row r = new Row(i);
-	    	for (int j = 0; j < columns.size(); j++) {
-		    double cellVal = columns.get(j).get(i);
-		    r.addCellVal(cellVal);
-		}
-		r.setState(sd.determine(r));
-		rows.add(r);
-	    }
-
-	    Phase p = r.getState();*/
 	    Phase[] phases = {
 	    	Standing,
 		Approach,
 		Landing,
 	    };
-
+            /**
+	     * using for loop for getting all rows individually
+	     * and determine the phase
+	     */
 	    int numOfRows = columns.get(0).getSize();
+	    ArrayList<Row> rows = new ArrayList<>(numOfRows);
+
 	    for(int i=0;i<numOfRows;i++){
 		    Row r = new Row(i);
+		    rows.add(r);
+
 		    for(int j=0;j<columns.size();j++){
 		    	double columnval=column.get(j).get(i);
 		    	// ArrayList<FlightColumn> columns
