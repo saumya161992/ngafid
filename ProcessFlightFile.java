@@ -88,9 +88,9 @@ public class ProcessFlightFile {
 	     */
 
 	    Phase[] phases = {
-	    	Standing,
-		Approach,
-		Landing,
+	    	new Standing(),
+		// Approach,
+		// Landing,
 	    };
             /**
 	     * using for loop for getting all rows individually
@@ -104,9 +104,9 @@ public class ProcessFlightFile {
 		    rows.add(r);
 
 		    for(int j=0;j<columns.size();j++){
-		    	double columnval=column.get(j).get(i);
+		    	double columnVal = columns.get(j).getValue(i);
 		    	// ArrayList<FlightColumn> columns
-		    	r.addColumnlVal(columns.get(j).getName(), columnVal);
+		    	r.addColVal(columns.get(j).getName(), columnVal);
 		    }
 
 		    for (Phase phase : phases) {
@@ -114,13 +114,14 @@ public class ProcessFlightFile {
 				r.setPhase(phase);
 			}	
 		    }
-           }		    
+           }
 
-		    
+	   rows.stream().filter(row -> row.getPhase() instanceof Standing).forEach(row -> System.out.println(row.getId() + " is in Standing phase."));
 
-            for (FlightColumn column : columns) {
+
+            /*for (FlightColumn column : columns) {
                 System.out.println("\t" + column);
-            }
+            }*/
 
         } catch (IOException e) {
             System.err.println("ERROR reading flight file: '" + flightFilename + "'");
