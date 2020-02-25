@@ -86,7 +86,7 @@ public class ProcessFlightFile {
 	    StateDecider sd = new StateDecider();
 	    int numOfRows = columns.get(0).size();
 
-	    for (int i = 0; i < numOfRows; i++) {
+	    /*for (int i = 0; i < numOfRows; i++) {
 		Row r = new Row(i);
 	    	for (int j = 0; j < columns.size(); j++) {
 		    double cellVal = columns.get(j).get(i);
@@ -96,7 +96,30 @@ public class ProcessFlightFile {
 		rows.add(r);
 	    }
 
-	    Phase p = r.getState();
+	    Phase p = r.getState();*/
+	    Phase[] phases = {
+	    	Standing,
+		Approach,
+		Landing,
+	    };
+
+	    int numOfRows = columns.get(0).getSize();
+	    for(int i=0;i<numOfRows;i++){
+		    Row r = new Row(i);
+		    for(int j=0;j<columns.size();j++){
+		    	double columnval=column.get(j).get(i);
+		    	// ArrayList<FlightColumn> columns
+		    	r.addColumnlVal(columns.get(j).getName(), columnVal);
+		    }
+
+		    for (Phase phase : phases) {
+		    	if (phase.isInThisPhase(r)) {
+				r.setPhase(phase);
+			}	
+		    }
+           }		    
+
+		    
 
             for (FlightColumn column : columns) {
                 System.out.println("\t" + column);

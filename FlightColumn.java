@@ -37,6 +37,24 @@ public class FlightColumn {
     public double getValue(int index) {
         return values.get(index);
     }
+    /**
+     * Returns name of the column
+     *
+     * @return name of column
+     */
+    
+    public String getName(){
+	   return this.name;
+    }
+   
+    /**
+     * Getter for getting row number
+     *
+     * @return the size of the column ArrayList
+     */
+    public int getSize(){
+	  return this.values.size();
+    } 
 
     /**
      * Writes this FlightColumn to a String so we can
