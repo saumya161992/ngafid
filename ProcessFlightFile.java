@@ -5,10 +5,18 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
+import java.util.HashMap;
+import java.util.stream.Collectors;
+/*
+ *this class is processing the data file
+ * and storee the phase and  ranges 
+ *inside the hashmap of string and arraylist
+ *
+ */
 public class ProcessFlightFile {
     public static void main(String[] arguments) {
         //make sure that one command line argument is given and
@@ -95,28 +103,46 @@ public class ProcessFlightFile {
             /**
 	     * using for loop for getting all rows individually
 	     * and determine the phase
+	     * using hashmap to store the phase identified which has 
+	     * arraylist of start and end time of phase
+	     *
 	     */
 	    int numOfRows = columns.get(0).getSize();
-	    ArrayList<Row> rows = new ArrayList<>(numOfRows);
-
+	    HashMap<String, ArrayList<int[]>> phaseRanges= new HashMap<>();
+             for (Phase phase: phases)
+		     phaseRanges.put(phase.toString(), new ArrayList<int[]>());
 	    for(int i=0;i<numOfRows;i++){
-		    Row r = new Row(i);
-		    rows.add(r);
-
-		    for(int j=0;j<columns.size();j++){
-		    	double columnVal = columns.get(j).getValue(i);
-		    	// ArrayList<FlightColumn> columns
-		    	r.addColVal(columns.get(j).getName(), columnVal);
-		    }
-
+                   
 		    for (Phase phase : phases) {
-		    	if (phase.isInThisPhase(r)) {
-				r.setPhase(phase);
-			}	
+			    /**
+			     * checks if phase is identified boolean
+			     *  of phase function return true
+			     *  and then start and end time of phase in flight 
+			     *  duration is stored
+			     *   list
+			     *   if the current row meets the condition of  certain phase then we update the ranges accordingly
+			     */  
+		    	if (phase.check(columns,i)) {
+				ArrayList<int[]> list = phaseRanges.get(phase.toString());
+		        	if(list.size()== 0){
+					list.add(new int[]{i,i});
+		       	 		continue;	
+			
+				}
+				int[] lastItem = list.get(list.size()-1);
+				if(lastItem[1] == i-1)
+					lastItem[1] = i;//updating second elemnt inside the array
+				else
+				  list.add(new int[]{i,i});
+			}
 		    }
            }
+	   /* converts phase arraylist of array to 
+	    * a string to be displayed on console
+	    */ 
 
-	   rows.stream().filter(row -> row.getPhase() instanceof Standing).forEach(row -> System.out.println(row.getId() + " is in Standing phase."));
+
+	   phaseRanges.keySet().stream().forEach(k -> System.out.println(k + ": " + phaseRanges.get(k).stream().map(Arrays::toString).collect(Collectors.toList())));
 
 
             /*for (FlightColumn column : columns) {
