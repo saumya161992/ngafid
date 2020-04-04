@@ -86,6 +86,13 @@ public class ProcessFlightFile {
 
             }
             bufferedReader.close();
+            int j=0;
+	    for(FlightColumn column : columns){
+		    j=j+1;
+		    //System.out.println("*************************************this is j********************************\n" );
+            System.out.println("\t\n" +  column );
+	    }
+           		    
 
             //after the file has been read print out all the
             //FlightColumns
@@ -94,12 +101,14 @@ public class ProcessFlightFile {
 	     * creating phase array of different 
 	     * types of phases
 	     */
-
-	    Phase[] phases = {
-	    	new Standing(),
-		// Approach,
+              
+	     
+	     
+	    String[] phasetypes = {"Standing", "Taxi", "InitialClimb" };
+		//new Taxi(),
+		//Approach,
 		// Landing,
-	    };
+	    
             /**
 	     * using for loop for getting all rows individually
 	     * and determine the phase
@@ -107,13 +116,16 @@ public class ProcessFlightFile {
 	     * arraylist of start and end time of phase
 	     *
 	     */
+	   
+	   
 	    int numOfRows = columns.get(0).getSize();
+	    System.out.println(" number of rows in CSV file are " + numOfRows);
 	    HashMap<String, ArrayList<int[]>> phaseRanges= new HashMap<>();
-             for (Phase phase: phases)
-		     phaseRanges.put(phase.toString(), new ArrayList<int[]>());
-	    for(int i=0;i<numOfRows;i++){
+             for (String phase : phasetypes)
+		     phaseRanges.put(phase, new ArrayList<int[]>());
+	    //for(int i=0;i<numOfRows;i++){
                    
-		    for (Phase phase : phases) {
+		    //for(Phase phase : phases) {
 			    /**
 			     * checks if phase is identified boolean
 			     *  of phase function return true
@@ -122,8 +134,16 @@ public class ProcessFlightFile {
 			     *   list
 			     *   if the current row meets the condition of  certain phase then we update the ranges accordingly
 			     */  
-		    	if (phase.check(columns,i)) {
-				ArrayList<int[]> list = phaseRanges.get(phase.toString());
+
+
+
+	     // here we pass row count and columns arraylist to standing class
+	      Standing ST=new Standing(numOfRows,columns);
+	      System.out.println(ST);
+                       //ST.check();	      
+	    // Phase.check(columns,numOfRows);
+		       //	{
+				/*ArrayList<int[]> list = phaseRanges.get(phase.toString());
 		        	if(list.size()== 0){
 					list.add(new int[]{i,i});
 		       	 		continue;	
@@ -136,13 +156,13 @@ public class ProcessFlightFile {
 				  list.add(new int[]{i,i});
 			}
 		    }
-           }
+      }
 	   /* converts phase arraylist of array to 
 	    * a string to be displayed on console
 	    */ 
 
 
-	   phaseRanges.keySet().stream().forEach(k -> System.out.println(k + ": " + phaseRanges.get(k).stream().map(Arrays::toString).collect(Collectors.toList())));
+	   //phaseRanges.keySet().stream().forEach(k -> System.out.println(k + ": " + phaseRanges.get(k).stream().map(Arrays::toString).collect(Collectors.toList())));*/
 
 
             /*for (FlightColumn column : columns) {

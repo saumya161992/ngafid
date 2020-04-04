@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-abstract public class Phase{
+public abstract class Phase implements StateDecider{
 
-	abstract public boolean check(ArrayList<FlightColumn> columns, int row);
+	abstract public  void  check(ArrayList<FlightColumn> columns, int row);
 }

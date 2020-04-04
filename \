@@ -2,16 +2,11 @@ import java.util.ArrayList;
 
 public  class Standing {
 
-         private int rowcount;// this is CSV file row count
-	 private ArrayList<FlightColumn> columnsList; //this will be used to read Columns arraylist generated in ProcessFlightFile
-         double[] slope=new double[245];// this will save all calculated slopes
-	 private ArrayList<Double> phasetransition=new ArrayList<>();//this arraylist will store those 20 altitudes against which transition is there
+         private int rowcount;
+	 private ArrayList<FlightColumn> columnsList; 
+         double[] slope=new double[250];
+	 private ArrayList<Double> bigSlope=new ArrayList<>();
 	 
-	 /*
-	  * here we calculate the average of time for 20 values
-	  * and average of altitude for 20 values
-	  * and then calculate the slope
-	  */
          public Standing(int rows,ArrayList<FlightColumn> columns){
               this.rowcount=rows;
               this.columnsList=columns;
@@ -66,34 +61,20 @@ public  class Standing {
 	    slope[count]= prodsum/mean_x_square;
 	    count++;
 	 }
-      
+      }
 
-     /* in this loop all calculated slopes 
-      * will be compared
-      * till an increasing slope is 
-      * identified to identify INITIAL CLIMB  phase from TAXI phase
-      * one an increasing slope is identified
-      * start and endindex for the slope is captured.
-      * Then all ALTAGL values from the start and end index which i captured are added to phase transition array list
-      */ 
-
-      for(int num=0;num<slope.length-1;num++){
-	      
-       if((slope[num+1]-slope[num])>0.1){
-	    int startindex= ((num+1)*20);
-	    
-	    int endindex=(((num+1)*20)+19);
-	    System.out.println("start index is" + startindex + "end index is" + endindex); 
-	    for(int index=startindex;index<=endindex;index++){
-               phasetransition.add(columnsList.get(ColNames.AltAGL.getValue()).getValue(index));
-	       //System.out.println("altitude at" + index + " is " + altitude[index]);
-            }		    
-	    
-       }
-       break;       
+      public void  checkphase(){
+       //Arraylist<Integer> bigslope=new Arraylist();
+      for(int num=0;num<slope.length;num++){
+        if(slope[num+1]-slope[num]>0){
+         
+      //System.out.println("this is a bigger slope" + slope[num+1]);
+      bigSlope.add(slope[num+1]);	      
+     
+      }	      
     }
- }  
-     /* @Override// this could be used to print all slope values
+}  
+      /*@Override
       public String toString(){
       String outputString= new String();
       for(int i=0;i<slope.length;i++){
@@ -106,16 +87,12 @@ public  class Standing {
      return outputString;
       }*/
 
-   /* this toString function is used to print all altitude
-    * values in  phaseTransition  arraylist so that
-    */
-
      @Override
      public String toString(){
-	     System.out.println("Transition from Taxi to initial climb is happening at below altitude");
-     String outputString=new String();
-     for(int i=0;i<phasetransition.size();i++){
-     outputString +="\t" + phasetransition.get(i) + "\n";
+
+     String outputString= new String();
+     for(int i=0;i<bigSlope.size();i++){
+     outputString +="\t" + bigSlope.get(i) + "\n";
      }
      return outputString;
 
