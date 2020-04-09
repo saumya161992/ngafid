@@ -4,7 +4,7 @@ public  class Standing {
 
          private int rowcount;// this is CSV file row count
 	 private ArrayList<FlightColumn> columnsList; //this will be used to read Columns arraylist generated in ProcessFlightFile
-         double[] slope=new double[245];// this will save all calculated slopes
+         double[] slope=new double[602];//this will save all calculated slopes
 	 private ArrayList<Double> phasetransition=new ArrayList<>();//this arraylist will store those 20 altitudes against which transition is there
 	 
 	 /*
@@ -22,16 +22,16 @@ public  class Standing {
 	      double prodsum=0;
 	      //double[] slope=new double[100];
 	      
-	      double[] prod=new double[20];
-	      double[] mean_x_diff=new double[20];
-	      double[] mean_y_diff=new double[20];
-              double[] altitude= new double[20];
-	      int[] time= new int[20];
+	      double[] prod=new double[10];
+	      double[] mean_x_diff=new double[10];
+	      double[] mean_y_diff=new double[10];
+              double[] altitude= new double[10];
+	      int[] time= new int[10];
 	      double mean_x_square=0;
-	      for(int i=0;i<rowcount;i+=20)
+	      for(int i=0;i<rowcount;i+=10)
 	      {
 		int p=0;      
-                for(int j=i;j<i+20;j++)
+                for(int j=i;j<i+10;j++)
 		{       
                         //
 			//System.out.println("value of " + j );
@@ -47,13 +47,13 @@ public  class Standing {
 		}
                       // System.out.println("totoal time is" + totaltime);
 
-	        	double mean_x=(sumaltitude/20);
-	        	double mean_y=(totaltime/20);
+	        	double mean_x=(sumaltitude/10);
+	        	double mean_y=(totaltime/10);
                         //System.out.println("mean of x is :"+ mean_x);
 	               // System.out.println("mean of y is :" +mean_y);
 	          
 
-                   for(int k=0;k<20;k++){		
+                   for(int k=0;k<10;k++){		
                         mean_x_diff[k]=(altitude[k]-mean_x);
 			//System.out.println("mean x diff" + k + "is" + mean_x_diff[k]); 
 	    		mean_x_square=mean_x_square + (mean_x_diff[k] * mean_x_diff[k]);
@@ -78,22 +78,25 @@ public  class Standing {
       */ 
 
       for(int num=0;num<slope.length-1;num++){
+	
 	      
-       if((slope[num+1]-slope[num])>0.1){
-	    int startindex= ((num+1)*20);
+       if(slope[num]<1.0 && slope[num+1]>1.0){
+	    int startindex= ((num+1)*10);
 	    
-	    int endindex=(((num+1)*20)+19);
+	    int endindex=(((num+1)*10)+9);
+	    System.out.println("Taxi ended at time  " + startindex + "  second"); 
 	    System.out.println("start index is" + startindex + "end index is" + endindex); 
-	    for(int index=startindex;index<=endindex;index++){
-               phasetransition.add(columnsList.get(ColNames.AltAGL.getValue()).getValue(index));
+	    //for(int index=startindex;index<=endindex;index++){
+               //phasetransition.add(columnsList.get(ColNames.AltAGL.getValue()).getValue(index));
 	       //System.out.println("altitude at" + index + " is " + altitude[index]);
-            }		    
-	    
+            //}		    
+           break;	    
        }
-       break;       
+       
     }
+    System.out.println("not found comparitive slope");
  }  
-     /* @Override// this could be used to print all slope values
+      @Override// this could be used to print all slope values
       public String toString(){
       String outputString= new String();
       for(int i=0;i<slope.length;i++){
@@ -104,15 +107,15 @@ public  class Standing {
 
      outputString += "\n"; 
      return outputString;
-      }*/
+      }
 
    /* this toString function is used to print all altitude
     * values in  phaseTransition  arraylist so that
     */
 
-     @Override
+     /*@Override
      public String toString(){
-	     System.out.println("Transition from Taxi to initial climb is happening at below altitude");
+	     System.out.println("Transition from Taxi to Takeoff is happening at below altitude");
      String outputString=new String();
      for(int i=0;i<phasetransition.size();i++){
      outputString +="\t" + phasetransition.get(i) + "\n";
@@ -120,7 +123,7 @@ public  class Standing {
      return outputString;
 
     	     
- }	     
+ }*/	     
          /**
 	 * checking if the current
 	 * row is in standing phase
