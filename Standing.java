@@ -20,19 +20,8 @@ public  class Standing {
          public Standing(int rows,ArrayList<FlightColumn> columns){
               this.rowcount=rows;
               this.columnsList=columns;
-              //double sumaltitude=0.0;
-	      //int count=0;
-             // double mean_x=0.0;
-	      //double mean_y=0.0;
-	      //double totaltime=0.0;
-	      //double[] prod=new double[60];
-	      //double[] mean_x_diff=new double[60];
-	      //double[] mean_y_diff=new double[60];
-              //double[] altitude= new double[60];
-	      //int[] time= new int[60];
-
-
-             check(rowcount);
+              
+	         check(rowcount);
 
 	      
 	     /* for(int i=0;i<rowcount;i+=60)
@@ -109,7 +98,7 @@ public  class Standing {
 				break;
 			}
 			i=i+60;
-			//System.out.println(" now i is " + i);
+			
 		}
 	 }
 
@@ -120,8 +109,7 @@ public  class Standing {
 	      double totaltime=0.0;
 	      double[] altitude= new double[60];
 	      int[] time= new int[60];
-              // Standing s = new Standing(...);
-	      int p=0;
+              int p=0;
 	      double sumaltitude=0.0;
 	      Arrays.fill(altitude,0);
 	      Arrays.fill(time,0);
@@ -129,16 +117,13 @@ public  class Standing {
 	       for(int j=offset;j<offset+length;j++)
 
 		{      
-		       //System.out.println("offset is " + j + " submission is " + (offset+length));
-	                      
+		      	                      
                         if(j<rowcount){
-               		    altitude[p]=columnsList.get(ColNames.AltAGL.getValue()).getValue(j);
-		            //System.out.println("inside if and altitude is  " +  altitude[p]);
-			    time[p]=j;
-			    //System.out.println(" time is " + time[p]);
-            		    sumaltitude=sumaltitude + altitude[p];
-                            totaltime= totaltime +  time[p];
-		            p++;
+               		     altitude[p]=columnsList.get(ColNames.AltAGL.getValue()).getValue(j);
+		             time[p]=j;
+			     sumaltitude=sumaltitude + altitude[p];
+                             totaltime= totaltime +  time[p];
+		             p++;
 	                }
 		}
                        
@@ -146,20 +131,19 @@ public  class Standing {
 
 		mean_y=(sumaltitude/60);
 		mean_x=(totaltime/60);
-		//System.out.println("mean_x is  " + mean_x + " mean y is "+ mean_y);
-			
+					
                 double  numerator = 0;
 		double  denominator = 0;
                 for(int k=0; k<length && offset+k < rowcount; k++){
 	    	   numerator += (altitude[k] - mean_y) * (time[k] - mean_x);
 		   denominator += (time[k]-mean_x)*(time[k] -mean_x);
 	        }   
-		//System.out.println(" numerator is " + numerator + " denominator is " + denominator);
+		
 
 	     
-             slope=numerator/denominator;
-	     System.out.println("slope " + count + " is " + slope);
-             count++;
+              slope=numerator/denominator;
+	      System.out.println("slope " + count + " is " + slope);
+              count++;
 	     	     
              return slope;  
        	    
@@ -203,21 +187,7 @@ public  class Standing {
     }
     System.out.println("not found comparitive slope");
  }  
-      @Override// this could be used to print all slope values
-      public String toString(){
-      String outputString= new String();
-      for(int i=0;i<slope.length;i++){
-         //System.out.println("hhhhhh");
-	 df.setRoundingMode(RoundingMode.UP); 
-       outputString += "\t" + df.format(slope[i]) + "\n";
- }
-
-     outputString += "\n"; 
-     return outputString;
-      }
-
-   
-}*/     
+      
 
     	     
  	     
@@ -229,22 +199,7 @@ public  class Standing {
 	 * @return true if the current row is in standing phase otherwise false
 	 */
 
-	/*public void check(FlightColumn List, int rowcount){
 
-		double[] altitude= new double[20];
-		for(int i=0;i<20;i++){
-
-		altitude[i] = columnsList.get(ColNames.AltAGL.getValue()).getValue(i);
-                 System.out.println(altitude[i]);
-		}
-	
-		//double gndSpd = columns.get(ColNames.GndSpd.getValue()).getValue(row);
-
-		//system.out.println(row + ": " + altAgl + " | " + gndSpd);
-
-		//return altAgl == 0 && gndSpd == 0;
-
-	}
 	
 
 
