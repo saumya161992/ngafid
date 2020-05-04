@@ -139,6 +139,7 @@ public class ProcessFlightFile {
 
 	     // here we pass row count and columns arraylist to standing class
 	      Standing ST=new Standing(numOfRows,columns);
+	      //Takeoff TT=new Takeoff(numOfRows,columns);
 	      System.out.println(ST);
                        //ST.check();	      
 	    // Phase.check(columns,numOfRows);
