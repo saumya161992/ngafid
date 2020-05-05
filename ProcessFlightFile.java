@@ -30,7 +30,7 @@ public class ProcessFlightFile {
         //The first command line argument will be the flight filename
         String flightFilename = arguments[0];
 
-        try {
+       try {
 
             //create a buffered reader given the filename (which requires creating a File and FileReader object beforehand)
             BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(flightFilename)));
@@ -88,92 +88,29 @@ public class ProcessFlightFile {
             bufferedReader.close();
             int j=0;
 	    for(FlightColumn column : columns){
-		    j=j+1;
-		    //System.out.println("*************************************this is j********************************\n" );
-            System.out.println("\t\n" +  column );
+            	j=j+1;
+            	System.out.println("\t\n" +  column );
 	    }
            		    
-
-            //after the file has been read print out all the
+	    //after the file has been read print out all the
             //FlightColumns
 	    //
 	    /**
 	     * creating phase array of different 
 	     * types of phases
 	     */
-              
-	     
-	     
-	    String[] phasetypes = {"Standing", "Taxi", "InitialClimb" };
-		//new Taxi(),
-		//Approach,
-		// Landing,
-	    
-            /**
-	     * using for loop for getting all rows individually
-	     * and determine the phase
-	     * using hashmap to store the phase identified which has 
-	     * arraylist of start and end time of phase
-	     *
-	     */
-	   
-	   
+            String[] phasetypes = {"Standing", "Taxi", "InitialClimb" };
 	    int numOfRows = columns.get(0).getSize();
 	    System.out.println(" number of rows in CSV file are " + numOfRows);
-	    HashMap<String, ArrayList<int[]>> phaseRanges= new HashMap<>();
-             for (String phase : phasetypes)
-		     phaseRanges.put(phase, new ArrayList<int[]>());
-	    //for(int i=0;i<numOfRows;i++){
-                   
-		    //for(Phase phase : phases) {
-			    /**
-			     * checks if phase is identified boolean
-			     *  of phase function return true
-			     *  and then start and end time of phase in flight 
-			     *  duration is stored
-			     *   list
-			     *   if the current row meets the condition of  certain phase then we update the ranges accordingly
-			     */  
-
-
-
-	     // here we pass row count and columns arraylist to standing class
-	      Standing ST=new Standing(numOfRows,columns);
+	      // here we pass row count and columns arraylist to standing class
+	    Standing ST=new Standing(numOfRows,columns);
 	      //Takeoff TT=new Takeoff(numOfRows,columns);
-	      System.out.println(ST);
-                       //ST.check();	      
-	    // Phase.check(columns,numOfRows);
-		       //	{
-				/*ArrayList<int[]> list = phaseRanges.get(phase.toString());
-		        	if(list.size()== 0){
-					list.add(new int[]{i,i});
-		       	 		continue;	
-			
-				}
-				int[] lastItem = list.get(list.size()-1);
-				if(lastItem[1] == i-1)
-					lastItem[1] = i;//updating second elemnt inside the array
-				else
-				  list.add(new int[]{i,i});
-			}
-		    }
-      }
-	   /* converts phase arraylist of array to 
-	    * a string to be displayed on console
-	    */ 
-
-
-	   //phaseRanges.keySet().stream().forEach(k -> System.out.println(k + ": " + phaseRanges.get(k).stream().map(Arrays::toString).collect(Collectors.toList())));*/
-
-
-            /*for (FlightColumn column : columns) {
-                System.out.println("\t" + column);
-            }*/
-
-        } catch (IOException e) {
+	    System.out.println(ST);
+                       
+	} catch (IOException e) {
             System.err.println("ERROR reading flight file: '" + flightFilename + "'");
             e.printStackTrace();
             System.exit(1);
-        }
+       }
     }
 }
