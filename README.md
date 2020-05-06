@@ -1,17 +1,27 @@
 
 
-## How to execute code at your local
+## Identifying Phases of Flight for the NGAFID
 
-1. Install Java version java 13.
-2. Goto my below git hub link to download csv files and place them in downloads folder.
-3. Download csv flight files from Data folder.
+   This project identified phases of flight for the NGAFID. Phase of flight refers to a period within a flight.
+   It will identify which phase or potentially subphase an aircraft is in at a giventime
+###How to run the files from the NGAFID repository to generate results
+
+Software Requirements 
+
+ - JDK :Java
+ - Text Editor
+
+  **Setting Up TestData**
+   
+   Get test data from Links[git hub link](https://github.com/saumya161992/ngafid) to download csv files and place them in downloads folder.These CSV files will be read into the java code of ProcessFlightFile and henceforth will be used to identify the current pgase of the aircraft
+  
 
 
-**Setting up TestData**
+
 
 
 **Environment Settings**
-#####Installation instruction for windows
+  Installation instruction for windows
 
 1. Download JDK 13. Links[Goto Java SE download site](https://www.oracle.com/java/technologies/javase-downloads.html) 
 2. Install JDK. Run the downloaded installer which installs both JDK and JRE.
@@ -23,13 +33,13 @@
    Variable value : c:\Program Files\Java\jdk-13.0.{x}\bin;[do not delete exiting entries...]
    
    ```
-#####Installation instruction for MACOS
+  Installation instruction for MACOS
 
 1. Download JDK 13. Links[Goto Java SE download site](https://www.oracle.com/java/technologies/javase-downloads.html) 
 2.  Install JDK/JRE
-    1. Double-click the downloaded Disk Image (DMG) file. Follow the screen instructions to install JDK/JRE.
-    1. Eject the DMG file.
-    1. To verify your installation, open a "Terminal" and issue these commands. 
+    - Double-click the downloaded Disk Image (DMG) file. Follow the screen instructions to install JDK/JRE.
+    - Eject the DMG file.
+    - To verify your installation, open a "Terminal" and issue these commands. 
 
 __to comple__
 
