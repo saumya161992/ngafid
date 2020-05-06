@@ -5,6 +5,7 @@
 public enum ColNames{
 
 	AltAGL(0),
+	//Time(1),
 	E1_CHT1(1),
 	E1_CHT2(2),
 	E1_CHT3(3),
@@ -30,6 +31,7 @@ public enum ColNames{
 	volt2(23),
 	VSpd(24),
 	VSpdG(25);
+	
 
 
 
