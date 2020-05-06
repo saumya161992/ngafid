@@ -4,6 +4,8 @@
 
    This project identified phases of flight for the NGAFID. Phase of flight refers to a period within a flight.
    It will identify which phase or potentially subphase an aircraft is in at a giventime
+
+
 **How to run the files from the NGAFID repository to generate results**
 
 
