@@ -6,9 +6,12 @@
    It will identify which phase or potentially subphase an aircraft is in at a giventime
 **How to run the files from the NGAFID repository to generate results**
 
+
+ Language used : JAVA
+
  **Software Requirements** 
 
- - JDK :Java
+ - JDK : Java
  - Text Editor
 
   **Setting Up TestData**
@@ -58,32 +61,23 @@ java ProcessFlightFile ~/Downloads/flight_0.csv
 
 
 
+   **Dependencies**
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    Packages which are imported:
+ 
+    - java.util.ArrayvList;
+    - java.util.Arrays;
+    - java.math.RoundingMode;
+    - java.text.DecimalFormati;
+    - java.io.BufferedReader;
+    - java.io.BufferedWriter;
+    - java.io.File;
+    - java.io.FileReader;
+    - java.io.FileWriter;
+    - java.io.IOException;
+    - java.util.Scanner;
+    - java.util.Collections;
+    - java.util.List;
+    - java.util.HashMap;
+    - java.util.stream.Collectors;
 
