@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
+import java.util.Scanner;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -102,10 +102,19 @@ public class ProcessFlightFile {
             String[] phasetypes = {"Standing", "Taxi", "InitialClimb" };
 	    int numOfRows = columns.get(0).getSize();
 	    System.out.println(" number of rows in CSV file are " + numOfRows);
-	      // here we pass row count and columns arraylist to standing class
-	    Standing ST=new Standing(numOfRows,columns);
-	    //Takeoff TT=new Takeoff(numOfRows,columns);
-	    System.out.println(ST);
+	    // here we pass row count and columns arraylist to standing class
+	    System.out.println("Enter phase type 1 for identifying Transition from standing phase to taxi phase and type 2 to identify Transition from taxi to takeoff phase");
+	    Scanner sc=new Scanner(System.in);
+	    int number=sc.nextInt();
+	    switch(number){
+	    	case 1:	Standing ST=new Standing(numOfRows,columns);
+			System.out.println(ST);
+			break;
+		case 2:	Takeoff TT=new Takeoff(numOfRows,columns);
+	                System.out.println(TT);
+			break;
+		default:break;
+	   }		
                        
 	} catch (IOException e) {
             System.err.println("ERROR reading flight file: '" + flightFilename + "'");

@@ -1,1 +1,0 @@
-memberSearchIndex = [{"p":"<Unnamed>","c":"Takeoff","l":"Takeoff(int, ArrayList<FlightColumn>)","url":"%3Cinit%3E(int,java.util.ArrayList)"}]
