@@ -4,9 +4,9 @@
 
    This project identified phases of flight for the NGAFID. Phase of flight refers to a period within a flight.
    It will identify which phase or potentially subphase an aircraft is in at a giventime
-###How to run the files from the NGAFID repository to generate results
+**How to run the files from the NGAFID repository to generate results**
 
-Software Requirements 
+ **Software Requirements** 
 
  - JDK :Java
  - Text Editor
@@ -35,20 +35,20 @@ Software Requirements
    ```
   Installation instruction for MACOS
 
-1. Download JDK 13. Links[Goto Java SE download site](https://www.oracle.com/java/technologies/javase-downloads.html) 
+1. Download JDK 13. Links[ Goto Java SE download site ](https://www.oracle.com/java/technologies/javase-downloads.html) 
 2.  Install JDK/JRE
     - Double-click the downloaded Disk Image (DMG) file. Follow the screen instructions to install JDK/JRE.
     - Eject the DMG file.
     - To verify your installation, open a "Terminal" and issue these commands. 
 
-__to comple__
+__to complile code__
 
 
 ```JAVA
 javac *.java
 
 ```
-__torun__
+__to run code__
 
 ```
 
