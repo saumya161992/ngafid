@@ -14,7 +14,7 @@ public class FlightColumn {
      * this object will hold the values for
      */
     public FlightColumn(String name) {
-        this.name = name;
+         this.name = name;
         values = new ArrayList<Double>();
     }
 

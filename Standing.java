@@ -30,7 +30,7 @@ public  class Standing {
 	 * @param rowcount is the count of number of rows in CSV 
 	 */
 	void check(int rowcount) {
-		
+	
 	double Groundspeed=0.0;     
 	int j=0;
 
@@ -51,7 +51,3 @@ public  class Standing {
 
        
 
-	
-
-
-	

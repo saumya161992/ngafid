@@ -21,7 +21,7 @@ public class ProcessFlightFile {
     public static void main(String[] arguments) {
         //make sure that one command line argument is given and
         //print an error message and quit if not
-        if (arguments.length != 1) {
+        if (arguments.length != 2) {
             System.err.println("ERROR: did not specify proper command line arguments, usage:");
             System.err.println("java ProcessFlightFile <flight filename>");
             System.exit(1);
@@ -29,6 +29,7 @@ public class ProcessFlightFile {
 
         //The first command line argument will be the flight filename
         String flightFilename = arguments[0];
+	String phasetype = arguments[1];
 
        try {
 
@@ -45,14 +46,14 @@ public class ProcessFlightFile {
             //hold the data for each column
             ArrayList<FlightColumn> columns = new ArrayList<FlightColumn>();
 
-            System.out.println("File columns are: ");
+            //System.out.println("File columns are: ");
             for (String columnName : columnNames) {
                 //for each column we just parsed from the file
                 //create a new FlightColumn object and add it
                 //to the columns ArrayList
                 FlightColumn newColumn = new FlightColumn(columnName);
                 columns.add(newColumn);
-                System.out.println("\t" + newColumn);
+               // System.out.println("\t" + newColumn);
             }
 
             //read the next line of the file, which is the units
@@ -63,7 +64,7 @@ public class ProcessFlightFile {
 
             //read the rest of the file line by line
             while ((line = bufferedReader.readLine()) != null) {
-                System.out.println(line); 
+                //System.out.println(line); 
 
                 String[] valueStrings = line.split(",");
 
@@ -87,32 +88,37 @@ public class ProcessFlightFile {
             }
             bufferedReader.close();
             int j=0;
-	    for(FlightColumn column : columns){
+	    /*for(FlightColumn column : columns){
             	j=j+1;
             	System.out.println("\t\n" +  column );
-	    }
+	    }*/
            		    
 	    //after the file has been read print out all the
             //FlightColumns
-	    //
+	    
 	    /**
 	     * creating phase array of different 
 	     * types of phases
-	     */
-            String[] phasetypes = {"Standing", "Taxi", "InitialClimb" };
+	     *
+	     **/
+            //String[] phasetypes = {"Standing", "Taxi", "InitialClimb" };
 	    int numOfRows = columns.get(0).getSize();
 	    System.out.println(" number of rows in CSV file are " + numOfRows);
 	    // here we pass row count and columns arraylist to standing class
 	    System.out.println("Enter phase type 1 for identifying Transition from standing phase to taxi phase and type 2 to identify Transition from taxi to takeoff phase");
-	    Scanner sc=new Scanner(System.in);
-	    int number=sc.nextInt();
-	    switch(number){
+	    //Scanner sc=new Scanner(System.in);
+	    
+	    int type = Integer.valueOf(phasetype);
+	    switch(type){
 	    	case 1:	Standing ST=new Standing(numOfRows,columns);
 			System.out.println(ST);
 			break;
 		case 2:	Takeoff TT=new Takeoff(numOfRows,columns);
 	                System.out.println(TT);
 			break;
+		case 3: InitialClimb IC=new InitialClimb(numOfRows,columns);
+		        System.out.println(IC);
+		        break;	
 		default:break;
 	   }		
                        

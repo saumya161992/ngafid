@@ -1,7 +1,13 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+
 public  class Takeoff {
 
 	private static DecimalFormat df=new DecimalFormat("0.00");
@@ -37,34 +43,91 @@ public  class Takeoff {
 	 * @param rowcount is the number of rows in CSV file
 	 */
          void check(int rowcount) {
+		 
 		double previous_slope = 0.0;
-		double current_slope=0.0;
-		int i=0;
-		int pointer=0;//this will maintain count of the current slope
+		double previous_rsquare = 0.0;
+		double current_rsquare = 0.0;
+		double current_slope = 0.0;
+		int i = 0;
+		int pointer = 0;//this will maintain count of the current slope
+		//System.out.println("current slope" + "," + "current rsquare" + ", " + " previous slope " + "," + "previous rsquare");
 	 	
+		String str = "";
+                String filepath = "/home/saumya/saumya_ngafid/ngafid/output.csv";
+		File file = new File(filepath);
+		/*try{
+
+			//FileWriter outputfile = new FileWriter(file);	
+			//CSVWriter writer = new CSVWriter(outputfile);
+			BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(new File(filepath)));
+		
+			while(i<rowcount){
+				if(i==0){
+					LinearRegression temp = getRegressionSlope(rowcount,i,60);
+
+					previous_slope = temp.slope;
+					previous_rsquare = temp.rsquare;
+				}else{
+
+					previous_slope = current_slope;
+					previous_rsquare = current_rsquare;
+                               }
+
+			       i=i+1;
+                               LinearRegression temp = getRegressionSlope(rowcount,i,60);
+			       current_slope = temp.slope;
+			       current_rsquare = temp.rsquare;
+			       pointer++;		
+ 			       str = current_slope + ", " + current_rsquare + " , " + previous_slope + ", " + previous_rsquare;
+       			       String[] data = str.split(",");
+                               bufferedWriter.write(str);
+			       bufferedWriter.close();
+			}       
+              	}catch(IOException e){
+              		
+			e.printStackTrace();
+                }
+		
+            }*/		
+
+
+
+
+
+
+
+
                 while(i<rowcount){  
 			if(i==0){
+				LinearRegression temp = getRegressionSlope(rowcount ,i ,60);
 			        //this will store the first clculated slope
-				previous_slope = getRegressionSlope(rowcount, i, 60);
+				//previous_slope = getRegressionSlope(rowcount, i, 60);
+				previous_slope = temp.slope;
+				previous_rsquare = temp.rsquare;
 			}else{
 				//this will store the previous slope
-				previous_slope=current_slope;
+				previous_slope = current_slope;
+				previous_rsquare = current_rsquare;
 		       }	
-		        i=i+60;
+		        i=i+1;
+			LinearRegression temp = getRegressionSlope(rowcount ,i ,60);
 			//here the current calculated slope is stored
-			current_slope = getRegressionSlope(rowcount, i, 60);
+			//current_slope = getRegressionSlope(rowcount, i, 60);
+			current_slope = temp.slope;
+			current_rsquare = temp.rsquare;
 			pointer++;
-			System.out.println("Current slope calculated as " + current_slope + " and previous slope is " + previous_slope);
+			System.out.println( current_slope + ", " + current_rsquare + " , " + previous_slope + ", " + previous_rsquare);
 			//the below condition will compare previous slope with current slope and 
 			//to identify the transition to Takeoff phase 
-			if (previous_slope < 1.0 && current_slope >= 1.0) {
+			if ( current_slope >= 1.0 && temp.rsquare > 0.97 ){
+				       //	&& temp.rsquare >=0.67) {
 				System.out.println("found phase");
 				// this will store the exact time at which transition from taxi to takeoff is happening 
-			        int startindex= (pointer*60);
+			        int startindex= ((pointer-1));
 	                        //int endindex=(((i+1)*10)+59);
 	                        System.out.println("Taxi ended at time  " + startindex + "  second"); 
 				break;
-			}
+	       		}
 			
 		}
 	 }
@@ -79,15 +142,20 @@ public  class Takeoff {
 	  * @return this is the calculted slope which will be returned to check function
 	  */ 
 
-	 double getRegressionSlope(int rowcount, int offset,int length){
+          public LinearRegression getRegressionSlope(int rowcount, int offset,int length){
               
-         	double mean_x=0.0;// this will store mean of time
-	      	double mean_y=0.0;//this will store mean of altitude
-	      	double totaltime=0.0;
-	      	double[] altitude= new double[60];//will store all the altitude values for the defined range from start index
-	      	int[] time= new int[60];//this will store all the time values for the defined range from start index 
-              	int p=0;
-	      	double sumaltitude=0.0;
+		//double ss_r = 0.0;
+		//double ss_t = 0.0;
+                //double r2 = 0.0;
+		//double y_pred = 0.0;
+		//double bO = 0.0;
+         	double mean_x = 0.0;// this will store mean of time
+	      	double mean_y = 0.0;//this will store mean of altitude
+	      	double totaltime = 0.0;
+	      	double[] altitude = new double[60];//will store all the altitude values for the defined range from start index
+	      	int[] time = new int[60];//this will store all the time values for the defined range from start index 
+              	int p = 0;
+	      	double sumaltitude = 0.0;
 	      	Arrays.fill(altitude,0);//this will initialize altitude array with zero
 	      	Arrays.fill(time,0);//this will initilize time arry with zero
 
@@ -105,10 +173,11 @@ public  class Takeoff {
 		}
                        
 	       //this will store average of altitude
-		mean_y=(sumaltitude/60);
+		mean_y = (sumaltitude/60);
 		//this will store average of time
-		mean_x=(totaltime/60);
-					
+		mean_x = (totaltime/60);
+				
+	        double  intercept = 0.0;	
                 double  numerator = 0;
 		double  denominator = 0;
                 for(int k=0; k<length && offset+k < rowcount; k++){
@@ -117,15 +186,38 @@ public  class Takeoff {
 		 	denominator += (time[k]-mean_x)*(time[k] -mean_x);
 	        }   
 		//here final slope calculation for range is happening
-	        slope=numerator/denominator;
-
-	        System.out.println("slope " + count + " is " + slope);
+	        slope = numerator/denominator;
+		
+                intercept  = (mean_y - (slope *  mean_x));
+		//System.out.println("slope " + count + " is " + slope);
                 count++;
+                double actual = 0.0;
+                double estimated = 0.0;
+                double y_pred = 0.0;
+		double r2 = 0.0;
+		for(int i=0; i<length && offset+i < rowcount; i++){
+                y_pred = intercept + slope * time[i];
+                actual = actual + (altitude[i] - mean_y) * (altitude[i] - mean_y);
+                estimated = estimated + (y_pred - mean_y) * (y_pred - mean_y);
+	       }		
 	     	
+	       r2 = (estimated/actual);
+	       LinearRegression LR = new LinearRegression();
+	       LR.slope = slope;
+	       LR.rsquare = r2;
+	       //System.out.println(" r value is " + r2);
 	        //here slope is returned to the getregression slope function	
-                return slope;  
+               return LR;  
        	    
 	 }
+
+
+	 class LinearRegression{
+		 
+         	public double slope = 0.0;
+		public double rsquare = 0.0;
+
+         }		
 }		 
      
 
