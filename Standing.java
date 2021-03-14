@@ -1,8 +1,10 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 
-//in this class tansition from Standing to 
-//Taxi phase is identified
+/**
+ * in this class tansition from Standing to 
+ * Taxi phase is identified
+ */
 
 public  class Standing {
 
@@ -13,14 +15,14 @@ public  class Standing {
 	 * in this constructor we extract all values in the CSV and 
 	 * rowcount and then check function is called to identify transition 
 	 * from standing to Taxi phase  
-	 *@param columns is an arraylist for all values in CSV
-	 *@param rows is the row count of number of rows in CSV file 
+	 * @param columns is an arraylist for all values in CSV
+	 * @param rows is the row count of number of rows in CSV file 
 	 */
-	public Standing(int rows,ArrayList<FlightColumn> columns){
-		this.rowcount=rows;
-              	this.columnsList=columns;
+	public Standing(int rows, ArrayList<FlightColumn> columns) {
+		this.rowcount = rows;
+              	this.columnsList = columns;
               
-	         check(rowcount);
+	        check(rowcount);
 	 }
 
 
@@ -31,15 +33,17 @@ public  class Standing {
 	 */
 	void check(int rowcount) {
 	
-	double Groundspeed=0.0;     
-	int j=0;
+	//double starttime = columnsList.get(ColNames.Time.getValue()).getValue(0);
+	double Groundspeed = 0.0;     
+	int j = 0;
+		
 
-		while(j<rowcount){      
+		while (j < rowcount) {      
 			   
-                	Groundspeed=columnsList.get(ColNames.GndSpd.getValue()).getValue(j);
+                	Groundspeed = columnsList.get(ColNames.GndSpd.getValue()).getValue(j);
 			
-			if(Groundspeed > 4.50){
-				System.out.println("Standing phase ends and taxi starts at second " + j);	   
+			if (Groundspeed > 4.50) {
+				System.out.println("Standing phase ends/taxi starts at second " + j);	   
 				break;     
 	        	}
                 	j++;       

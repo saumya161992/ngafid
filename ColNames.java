@@ -36,28 +36,28 @@ public enum ColNames{
 
 
 
-private final int _idx;
+	private final int _idx;
 
-/**
- * this will store store the index of enum 
- * column names
- * @param  _idx will store index of columnname for future reference
- */
+	/**
+ 	* this will store store the index of enum 
+ 	* column names
+ 	* @param  _idx will store index of columnname for future reference
+ 	*/
 
-private ColNames(int idx){
-	_idx=idx;
-}
+	private ColNames (int idx) {
+		_idx=idx;
+	}
 
-/**
- * this will return the index
- * @return _idx to be returned
- */
+	/**
+ 	* this will return the index
+ 	* @return _idx to be returned
+ 	*/
 
- public int getValue(){
+ 	public int getValue() {
 
-	return _idx; 
+		return _idx; 
 
-}
+	}
 }	
 
 
