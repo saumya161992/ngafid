@@ -18,7 +18,7 @@
 
   **Setting Up TestData**
    
-   Get test data from Links[git hub link](https://github.com/saumya161992/ngafid) to download csv files and place them in downloads folder.These CSV files will be read into the java code of ProcessFlightFile and henceforth will be used to identify the current pgase of the aircraft
+   Get test data from Links[git hub link](https://github.com/saumya161992/ngafid) to download csv files.These CSV files will be read into the java code of ProcessFlightFile and henceforth will be used to identify the current pgase of the aircraft
   
 
 
@@ -56,11 +56,33 @@ javac *.java
 __to run code__
 
 ```
+ - execute ProcessFlightFile class by specifying the location of the testdate followed by example csv flight file and enter type 1 or 2 or 3 for phase type.
 
-java ProcessFlightFile ~/Downloads/flight_0.csv
+ - java ProcessFlightFile ~/TestData/pa28_flight_16704.csv 2
+
 
 ```
 
+__to execute testcases__
+
+```
+ - Download validation text files from [git hub link](https://github.com/saumya161992/ngafid/tree/master/Validationfiles).
+
+ - execute ProcessFlightFile class by specifying the location of the testdate followed by example csv flight file and enter type 1 or 2 or 3 for phase type.
+
+ - for executing test cases for transition from standing to taxi follow the below syntax:
+  
+    java FlightAnnotations ~/Validationfiles/TaxiAnnotations.txt
+
+- for executing test cases to detect multiple takeoffs follow the below syntax:
+ 
+    java TakeOffAnnotations ~/Validationfiles/Takeoff.txt
+
+- for executing test cases to detect transition from takeoff to initialclimb follow the below syntax:
+ 
+   java InitialClimbAnnotations ~/Validationfiles/initialclimbAnnotations.txt
+
+ ```
 
 
    **Dependencies**
@@ -83,3 +105,7 @@ java ProcessFlightFile ~/Downloads/flight_0.csv
     - java.util.HashMap;
     - java.util.stream.Collectors;
 
+
+**Domain and Architecture Diagrams** 
+
+     Get test data from Links[git hub link](https://github.com/saumya161992/ngafid/tree/master/Daigrams)
