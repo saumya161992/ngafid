@@ -52,7 +52,7 @@ public class FlightAnnotations {
 		        	continue;
 	         	}	       
             	 	//line = bufferedReader.readLine();
-	    	 	System.out.println(line);
+	    	 	//System.out.println(line);
             	 	String[] columnNames = line.split(",");
 		 
 		
@@ -60,7 +60,7 @@ public class FlightAnnotations {
 		 	double foundstart = Double.parseDouble(columnNames[2]);
 		 	double actualend = Double.parseDouble(columnNames[3]);
 		 	double foundend = Double.parseDouble(columnNames[4]);
-		 	System.out.println("actualstart is --->> " + actualstart  + " foundstart is ---->>>> "  + foundstart + " actual end is--->>  " + actualend + " found end is--->> " + foundend );
+		 	//System.out.println("actualstart is --->> " + actualstart  + " foundstart is ---->>>> "  + foundstart + " actual end is--->>  " + actualend + " found end is--->> " + foundend );
 	         	if ((foundstart == actualstart) || (Math.abs(foundstart - actualstart) <= 20)) {	
 			
 				truepositives++;
@@ -91,7 +91,9 @@ public class FlightAnnotations {
 		    	
 		
 		}
-	    	System.out.println("true positives are " + truepositives + " false negatives are " + falsenegatives + " falsepositives are " + falsepositives);
+	    	System.out.println("True positives are " + truepositives);
+		System.out.println("False negatives are " + falsenegatives);
+		System.out.println("False positives are " + falsepositives);
         } catch (IOException e) {
           	System.err.println("ERROR reading flight file: '" + flightFilename + "'");
             	e.printStackTrace();

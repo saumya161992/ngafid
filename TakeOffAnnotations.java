@@ -54,13 +54,13 @@ public class TakeOffAnnotations {
                                 continue;
                         }
                         //line = bufferedReader.readLine();
-                        System.out.println(line);
+                        //System.out.println(line);
                         String[] columnNames = line.split(",");
                         for (int i = 1 ; i < columnNames.length-1 ; i++) {
 
 				double actual = Double.parseDouble(columnNames[i]);
-                                double found = Double.parseDouble(columnNames[i]);
-                                if (actual == found) {
+                                double found = Double.parseDouble(columnNames[i+1]);
+                                if ((actual == found) || Math.abs(actual - found ) <= 10) {
 
 					truepositives++;
 				        i = i+2;
@@ -80,7 +80,9 @@ public class TakeOffAnnotations {
 
                                
 		  }
-		  System.out.println("true positives are " + truepositives + " false negatives are " + falsenegatives + " falsepositives are " + falsepositives  );
+		  System.out.println("true positives are " + truepositives);
+		  System.out.println("false negatives are " + falsenegatives);
+		  System.out.println("falsepositives are "  + falsepositives);
 
 		
 	} catch (IOException e) {
