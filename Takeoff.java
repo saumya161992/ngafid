@@ -91,13 +91,13 @@ public  class Takeoff {
 		         //System.out.println( current_slope + ", " + current_rsquare + " , " + previous_slope + ", " + previous_rsquare);
 		         //the below condition will compare previous slope with current slope and 
 		         //to identify the transition to Takeoff phase 
-		         if ( current_slope < previous_slope  && current_rsquare <= 0.999 && previous_rsquare >= 0.959 && previous_slopeprevious < previous_slope && altitude < 100) {
+		         if ( current_slope >8.0 && current_slope < previous_slope  && current_rsquare <= 0.999 && previous_rsquare >= 0.959 && previous_slopeprevious < previous_slope && altitude < 100) {
 				      // 0.969) { 
 			       //System.out.println("found phase");
 			       // this will store the exact time at which transition from taxi to takeoff is happening*/
 			       int startindex = ((pointer-1));
 	                       //int endindex=(((i+1)*10)+59);
-	                       //System.out.println("altitude " + altitude + " Takeoff started at time  " + startindex + "  second " + " current slope is " + current_slope + "  previous slope is  " +  previous_slope + " previous previous slope is " + previous_slopeprevious +  "rsquare value is " + current_rsquare+ " previous r_square is " + previous_rsquare); 
+	                       System.out.println("altitude " + altitude + " Takeoff started at time  " + startindex + "  second " + " current slope is " + current_slope + "  previous slope is  " +  previous_slope + " previous previous slope is " + previous_slopeprevious +  "rsquare value is " + current_rsquare+ " previous r_square is " + previous_rsquare); 
 			      System.out.println("Phase found " + " Takeoff started at time " + startindex);
 	       	       }
 		   }

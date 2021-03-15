@@ -56,26 +56,27 @@ public class TakeOffAnnotations {
                         //line = bufferedReader.readLine();
                         //System.out.println(line);
                         String[] columnNames = line.split(",");
-                        for (int i = 1 ; i < columnNames.length-1 ; i++) {
+                        for (int i = 1 ; i < columnNames.length-1 ; i = i+2) {
 
 				double actual = Double.parseDouble(columnNames[i]);
                                 double found = Double.parseDouble(columnNames[i+1]);
                                 if ((actual == found) || Math.abs(actual - found ) <= 10) {
 
 					truepositives++;
-				        i = i+2;
+				        
 
+				}
+		                else if (actual == 0.0) {
+                                        
+					falsepositives++;
+					
 				}	
-				else if (actual == 0.0) {
-
-                                	falsepositives++;
-					i=i+2;
-				}	
-                                else if (found  == 0.0) {
+			       	else if (found  == 0.0) {
 
 					falsenegatives++;
-					i=i+2;
-				}	
+					
+				} 
+					
                         }
 
                                
