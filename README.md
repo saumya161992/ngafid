@@ -50,7 +50,8 @@ __to complile code__
 
 
 ```JAVA
-javac *.java
+ 
+  javac *.java
 
 ```
 __to run code__
@@ -108,4 +109,4 @@ __to execute testcases__
 
 **Domain and Architecture Diagrams** 
 
-     Get test data from Links[git hub link](https://github.com/saumya161992/ngafid/tree/master/Daigrams)
+     Updated domain and architecture diagrams(including ingestion, cleaning and modelling layers) can be downloaded from Links[git hub link](https://github.com/saumya161992/ngafid/tree/master/Daigrams)
