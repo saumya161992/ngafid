@@ -21,7 +21,7 @@ public class ProcessFlightFile {
     public static void main(String[] arguments) {
         //make sure that one command line argument is given and
         //print an error message and quit if not
-        if (arguments.length != 2) {
+        if (arguments.length != 3) {
             System.err.println("ERROR: did not specify proper command line arguments, usage:");
             System.err.println("java ProcessFlightFile <flight filename>");
             System.exit(1);
@@ -30,6 +30,12 @@ public class ProcessFlightFile {
         //The first command line argument will be the flight filename
         String flightFilename = arguments[0];
 	String phasetype = arguments[1];
+	String manualannotationtext = arguments[2];
+	ArrayList<Phase> automatedPhases ;
+	ArrayList<Phase> humanPhases ;
+
+
+
 
        try {
 
@@ -110,15 +116,19 @@ public class ProcessFlightFile {
 	    
 	    int type = Integer.valueOf(phasetype);
 	    switch(type){
-	    	case 1:	Standing ST=new Standing(numOfRows,columns);
+	    	case 1:	Standing ST = new Standing(numOfRows,columns);
 			System.out.println(ST);
 			break;
-		case 2:	Takeoff TT=new Takeoff(numOfRows,columns);
+		case 2:	Takeoff TT = new Takeoff(numOfRows,columns);
 	                System.out.println(TT);
 			break;
-		case 3: InitialClimb IC=new InitialClimb(numOfRows,columns);
-		        System.out.println(IC);
-		        break;	
+		case 3: InitialClimb IC = new InitialClimb(numOfRows,columns);
+		        //System.out.println(IC);
+			automatedPhases = IC.check(numOfRows);
+
+			humanAnnotations HC  = new humanAnnotations(manualannotationtext);
+			Validation vc = new Validation(numOfRows,manualannotationtext, automatedPhases, humanPhases);
+			break;	
 		default:break;
 	   }		
                        
