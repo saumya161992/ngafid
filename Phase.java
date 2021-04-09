@@ -3,12 +3,12 @@
 public class Phase {
    String phaseName;
    int startRow;
-   int endRow:   ///make a constructor
+   int endRow;   ///make a constructor
    
    public Phase(String phaseName, int startRow, int endRow) {
 	   
       this.phaseName = phaseName;
-      this.startrow = startRow;
+      this.startRow = startRow;
       this.endRow = endRow;
       
    }  

@@ -12,26 +12,29 @@ import java.lang.Math;
 public class humanAnnotations {
 
 
-   //public String filename;
-   //public String phaseName;
+   public String filename;
+   public String phasename;
    public ArrayList<Phase> annotations;
-   public Phase 
-   public Phase 
-   public Phase endRow ; 
+   //public Phase 
+   public int startRow;
+   public int endRow; 
 
-   /*public humanAnnotations( String anotationsFilename,String phaseName) { 
+   public humanAnnotations( String anotationsFilename) { 
 
-      this.annotationsFilename = filename;
-      this.phaseName = phaseName;      
-      annotations = new ArrayList<Phase>();
+      this.filename = anotationsFilename;
+    //  this.phaseName = phaseName;      
+      //annotations = new ArrayList<Phase>();
 
 
-   }*/	   
+   }	   
 
    public ArrayList<Phase> getAnnotationsFor(String annotationFilename) {
 
+	
+    try {	   
 	BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(annotationFilename)));
-        annotations = new ArrayList<Phase>();
+        
+	annotations = new ArrayList<Phase>();
 
                 String line = "";
                 int count = 0;
@@ -49,16 +52,22 @@ public class humanAnnotations {
           
                         }*/
 			phasename = "InitialClimb";
-                        startRow = Double.parseDouble(columnNames[1]);
-                        endRow = Double.parseDouble(columnNames[2]);
-                    
-			annotations.add(Phase);
+                        startRow = Integer.parseInt(columnNames[1]);
+                        endRow = Integer.parseInt(columnNames[3]);
+                        Phase phasedetected = new Phase(phasename, startRow, endRow);
+			annotations.add(phasedetected);
                         
 	      }	
 	 
-	return annotations; 
+//	return annotations; 
+     } catch (IOException e) {
+            System.err.println("ERROR reading flight file: '" + annotationFilename + "'");
+            e.printStackTrace();
+            System.exit(1);
+    }
 
-                         
+     return annotations;
+                     
 
   }	
 

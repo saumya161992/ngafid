@@ -21,26 +21,41 @@ public class ProcessFlightFile {
     public static void main(String[] arguments) {
         //make sure that one command line argument is given and
         //print an error message and quit if not
-        if (arguments.length != 3) {
+        if (arguments.length != 2) {
             System.err.println("ERROR: did not specify proper command line arguments, usage:");
             System.err.println("java ProcessFlightFile <flight filename>");
             System.exit(1);
         }
 
         //The first command line argument will be the flight filename
-        String flightFilename = arguments[0];
+        //String flightFilename = arguments[0];
 	String phasetype = arguments[1];
-	String manualannotationtext = arguments[2];
-	ArrayList<Phase> automatedPhases ;
+	String manualannotationtext = arguments[0];
+	ArrayList<ArrayList<Phase>> Allautomatedphases = new ArrayList<ArrayList<Phase>>() ;
 	ArrayList<Phase> humanPhases ;
+      
+      
 
+	String line1 = "";
+         try {
+      
+	      	BufferedReader bufferedReadernew = new BufferedReader(new FileReader(new File(manualannotationtext)));
+	        while ((line1 = bufferedReadernew.readLine()) != null) {
+
+      		//String line1 = "";
+      		//read the first line of the file
+      		//line1 = bufferedReader.readLine();
+        	String[] columnNames1 = line1.split(",");
+
+
+	      
 
 
 
        try {
 
             //create a buffered reader given the filename (which requires creating a File and FileReader object beforehand)
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(flightFilename)));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(columnNames1[0])));
 
             String line = "";
 
@@ -115,7 +130,7 @@ public class ProcessFlightFile {
 	    //Scanner sc=new Scanner(System.in);
 	    
 	    int type = Integer.valueOf(phasetype);
-	    switch(type){
+	    switch(type) {
 	    	case 1:	Standing ST = new Standing(numOfRows,columns);
 			System.out.println(ST);
 			break;
@@ -124,18 +139,30 @@ public class ProcessFlightFile {
 			break;
 		case 3: InitialClimb IC = new InitialClimb(numOfRows,columns);
 		        //System.out.println(IC);
-			automatedPhases = IC.check(numOfRows);
+			Allautomatedphases.add(IC.check(numOfRows));
 
 			humanAnnotations HC  = new humanAnnotations(manualannotationtext);
-			Validation vc = new Validation(numOfRows,manualannotationtext, automatedPhases, humanPhases);
+			humanPhases = HC.getAnnotationsFor(manualannotationtext);
+			Validation vc = new Validation(numOfRows,  Allautomatedphases, humanPhases);
+	//		vc.Validation(humanPhases, Allautomatedphases);
 			break;	
+		case 4: Enroute EN = new Enroute(numOfRows,columns);
+		        break;	
 		default:break;
-	   }		
+	   }	
+          	   
                        
 	} catch (IOException e) {
-            System.err.println("ERROR reading flight file: '" + flightFilename + "'");
+            System.err.println("ERROR reading flight file: '" + columnNames1[0] + "'");
             e.printStackTrace();
             System.exit(1);
        }
+     }} catch (IOException e) {
+            //System.err.println("ERROR reading flight file: '" + columnNames1[0] + "'");
+            e.printStackTrace();
+            System.exit(1);
+       }
+
+
     }
 }

@@ -16,7 +16,7 @@ public class InitialClimb{
 	private int j = 0;
 	private double altitude = 0.0;
         public ArrayList<Phase> time;
-	public Phase phasename;
+	public String phasename;
 	/**
         * in the InitialClimb constructor we we pass the count of rows
         * in a CSV file for execution at that time and the arraylist
@@ -29,7 +29,8 @@ public class InitialClimb{
         public InitialClimb(int rows, ArrayList<FlightColumn> columns) {
 		this.rowcount = rows;
 		this.columnsList = columns;
-                 
+                this.starttime = 0;
+	        this.endtime = 0;	
 		check(rowcount);
 		
 	}	
@@ -51,7 +52,7 @@ public class InitialClimb{
 
 		//double altitude = 0.0;
                 //int  j = 0;
-
+                
 		time = new ArrayList<Phase>();
 		
 
@@ -75,7 +76,7 @@ public class InitialClimb{
 			if (altitude >= 1000) {
 				endtime = j;
 				System.out.println("Initial climb started at time " + starttime + " and ended at time " + endtime);
-				Phase.endRow = endtime;
+				//endRow = endtime;
 				Phase currentphase = new Phase("InitialClimb", starttime, endtime);
                                 time.add(currentphase);
 				break;
