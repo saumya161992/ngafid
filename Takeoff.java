@@ -17,6 +17,10 @@ public  class Takeoff {
 
 	private static DecimalFormat df = new DecimalFormat("0.00");
         private int count = 0;
+	private int flag = 0;
+	private int starttime = 0;
+	private int endtime = 0;
+	private String flight;
         private int rowcount;// this is CSV file row count
 	private ArrayList<FlightColumn> columnsList; //this will be used to read Columns arraylist generated in ProcessFlightFile
         double slope = 0.0;//this will save all calculated slopes
@@ -31,12 +35,13 @@ public  class Takeoff {
 	 * @param rows is the count of rows in CSV file
 	 * @param columns is the arraylist to that holds all values of CVS
 	 */
-	public Takeoff(int rows, ArrayList<FlightColumn> columns) {
+	public Takeoff(int rows, ArrayList<FlightColumn> columns ) {
         	this.rowcount = rows;
               	this.columnsList = columns;
-              
+                
 		//here we call check function to identify if there is a transition from Taxi to Takeoff phase
 	        check(rowcount);
+		System.out.println("for " + flight);
         }
       
 	/**
@@ -47,8 +52,9 @@ public  class Takeoff {
 	 *
 	 * @param rowcount is the number of rows in CSV file
 	 */
-         void check(int rowcount) {
+         public ArrayList<Phase> check(int rowcount) {
 
+		 ArrayList<Phase> phasedetected = new ArrayList();
 		 double previous_slopeprevious = 0.0; 
 		 double previous_slope = 0.0;
 		 double previous_rsquare = 0.0;
@@ -62,11 +68,11 @@ public  class Takeoff {
                  String filepath = "/home/saumya/saumya_ngafid/ngafid/output.csv";
 		 File file = new File(filepath);
 		
-		 while (i < rowcount) {  
+		 while (i < rowcount - 1) {  
 
-			 if (i == 0) {
+	         	if (i == 0) {
 
-				 LinearRegression temp = getRegressionSlope(rowcount, i, 60);
+				LinearRegression temp = getRegressionSlope(rowcount, i, 60);
 			         //this will store the first clculated slope
 				 //previous_slope = getRegressionSlope(rowcount, i, 60);
 				 previous_slope = temp.slope;
@@ -79,6 +85,7 @@ public  class Takeoff {
 				 previous_rsquare = current_rsquare;
 		       	 }	
 		       	 i = i+1;
+			 
 		       	 LinearRegression temp = getRegressionSlope(rowcount, i, 60);
 			 //here the current calculated slope is stored
 			 
@@ -91,16 +98,43 @@ public  class Takeoff {
 		         //System.out.println( current_slope + ", " + current_rsquare + " , " + previous_slope + ", " + previous_rsquare);
 		         //the below condition will compare previous slope with current slope and 
 		         //to identify the transition to Takeoff phase 
-		         if ( current_slope >8.0 && current_slope < previous_slope  && current_rsquare <= 0.999 && previous_rsquare >= 0.959 && previous_slopeprevious < previous_slope && altitude < 100) {
+		         if ( current_slope > 8.0 && current_slope < previous_slope  && current_rsquare <= 0.999 && previous_rsquare >= 0.959 && previous_slopeprevious < previous_slope && altitude < 100) {
 				      // 0.969) { 
 			       //System.out.println("found phase");
 			       // this will store the exact time at which transition from taxi to takeoff is happening*/
+	                       starttime = pointer-1;
 			       int startindex = ((pointer-1));
 	                       //int endindex=(((i+1)*10)+59);
-	                       System.out.println("altitude " + altitude + " Takeoff started at time  " + startindex + "  second " + " current slope is " + current_slope + "  previous slope is  " +  previous_slope + " previous previous slope is " + previous_slopeprevious +  "rsquare value is " + current_rsquare+ " previous r_square is " + previous_rsquare); 
-			      System.out.println("Phase found " + " Takeoff started at time " + startindex);
-	       	       }
+	                      //System.out.println("altitude " + altitude + " Takeoff started at time  " + startindex + "  second " + " current slope is " + current_slope + "  previous slope is  " +  previous_slope + " previous previous slope is " + previous_slopeprevious +  "rsquare value is " + current_rsquare+ " previous r_square is " + previous_rsquare); 
+			       //System.out.println("Phase found " + " Takeoff started at time " + startindex);
+			  flag = 0;
+                          }                                 
+                               
+			 //double height = columnsList.get(ColNames.AltAGL.getValue()).getValue(i);
+			 //int indexpointer = i;
+                         //System.out.println("pointer is " + indexpointer);
+			 
+                         	
+				 double height = columnsList.get(ColNames.AltAGL.getValue()).getValue(i);
+
+				if (height >= 35 && flag ==0) {
+                         	
+				 	endtime = i;
+					flag=1;
+
+                                 	Phase currentphase = new Phase("Takeoff", starttime, endtime);
+                                 	phasedetected.add(currentphase);
+ 
+                        	 	System.out.println( "Phase started ----> " + starttime  + "Phase  ended at time " + endtime + " height " + height );
+			
+		                 }
+				 
+                        
+              		 
+     
+	       	       
 		   }
+		   return phasedetected;
 	 }
 	 /**
 	  * here slope for altitude against time is

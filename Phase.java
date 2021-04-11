@@ -4,12 +4,14 @@ public class Phase {
    String phaseName;
    int startRow;
    int endRow;   ///make a constructor
+   //String flight;
    
    public Phase(String phaseName, int startRow, int endRow) {
 	   
       this.phaseName = phaseName;
       this.startRow = startRow;
       this.endRow = endRow;
+     // this.flight = flight;
       
    }  
   

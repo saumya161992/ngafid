@@ -9,8 +9,8 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 /**
- * this class will identify where taxi
- * is ending and multiple takeoffs
+ * this class will identify where enroute
+ * is starting
  */
 
 public  class Enroute {
@@ -26,7 +26,7 @@ public  class Enroute {
         private ArrayList<Double> phasetransition = new ArrayList<>();//this arraylist will store those 20 altitudes against which transition is there
 
         /**
-         * in the Takeoff constructor we we pass the count of rows
+         * in the Enroute constructor we we pass the count of rows
          * in a CSV file for execution at that time and the arraylist 
          * which has all the values of csv file and post this check function 
          * is call to identify the takeoff phase
@@ -36,19 +36,21 @@ public  class Enroute {
         public Enroute(int rows, ArrayList<FlightColumn> columns) {
                 this.rowcount = rows;
                 this.columnsList = columns;
-
+		int count = ((int)this.rowcount/300)+1;
+                double[] roundoffslope = new double[602];
 		while (k < rowcount) {
 
                         height = columnsList.get(ColNames.AltAGL.getValue()).getValue(k);
 
                         if (height >= 1000) {
-                                break;
+                        	break;
                         }
                         k++;
+		
                 }
 
-
-                //here we call check function to identify if there is a transition from Taxi to Takeoff phase
+                
+		//here we call check function to identify if there is a transition from initial climb to Enroute phase
                 check(rowcount, k);
         }
 
@@ -62,7 +64,7 @@ public  class Enroute {
          */
          void check(int rowcount, int k) {
 
-                 double previous_slopeprevious = 0.0;
+                 double previous_slopeprevious =+ 0.0;
                  double previous_slope = 0.0;
                  double previous_rsquare = 0.0;
                  double current_rsquare = 0.0;
@@ -75,43 +77,36 @@ public  class Enroute {
                  File file = new File(filepath);
 
                  while (i < rowcount) {
-
+                   
                          if (i == 0) {
 
-                                 LinearRegression temp = getRegressionSlope(rowcount ,i + k ,300);
+                                 LinearRegression temp = getRegressionSlope(rowcount, i+k, 300);
                                  //this will store the first clculated slope
-                                 //previous_slope = getRegressionSlope(rowcount, i, 60);
+                                 
                                  previous_slope = temp.slope;
-                                 previous_rsquare = temp.rsquare;
+               
+	       		//	 previous_rsquare = temp.rsquare;
                          } else{
 
                                  //this will store the previous slope
                                  previous_slopeprevious = previous_slope;
                                  previous_slope = current_slope;
-                                 previous_rsquare = current_rsquare;
+                          //       previous_rsquare = current_rsquare;
                          }
                          i = i+1;
-                         LinearRegression temp = getRegressionSlope(rowcount, i + k, 300);
+                         LinearRegression temp = getRegressionSlope(rowcount, i+k , 300);
                          //here the current calculated slope is stored
 
                          current_slope = temp.slope;
-                         current_rsquare = temp.rsquare;
-                         double altitude = columnsList.get(ColNames.AltAGL.getValue()).getValue(pointer + k);
-                         //System.out.println("altitude is " altitude);
-
+                         //current_rsquare = temp.rsquare;
+                        // double altitude = columnsList.get(ColNames.AltAGL.getValue()).getValue(pointer);
+                         //System.out.println("altitude is " +altitude );
+                         int val = i+k;
                          pointer++;
-                         //System.out.println( current_slope + ", " + current_rsquare + " , " + previous_slope + ", " + previous_rsquare + " altitude is " + altitude);
-                         //the below condition will compare previous slope with current slope and 
-                         //to identify the transition to Takeoff phase 
-                         if ( current_slope > 1.0 && current_slope < previous_slope  && current_rsquare <= 0.999 && previous_rsquare >= 0.959 && previous_slopeprevious < previous_slope && altitude < 100) {
-                                      // 0.969) { 
-                               //System.out.println("found phase");
-                               // this will store the exact time at which transition from taxi to takeoff is happening*/
-                               int startindex = ((pointer-1));
-                               //int endindex=(((i+1)*10)+59);
-                               System.out.println("altitude " + altitude + " Takeoff started at time  " + startindex + "  second " + " current slope is " + current_slope + "  previous slope is  " +  previous_slope + " previous previous slope is " + previous_slopeprevious +  "rsquare value is " + current_rsquare+ " previous r_square is " + previous_rsquare);
-                              System.out.println("Phase found " + " Enroute started at time " + startindex);
-                       }
+			 //if(current_slope > 0.0) {
+                         	System.out.println( "current slope is  " + current_slope + " at time " + val +    " , " + " previous slope is " +  previous_slope );
+			 //}
+
                    }
          }
          /**
@@ -137,15 +132,15 @@ public  class Enroute {
                  Arrays.fill(altitude, 0);//this will initialize altitude array with zero
                  Arrays.fill(time, 0);//this will initilize time arry with zero
 
-                for (int j = offset; j < offset+length; j++)
+                for (int j = offset; j < offset + length; j++)
                 {
                         if (j < rowcount) {
                                 //this is used to fetch altitude in CSV at a given index
                                 altitude[p] = columnsList.get(ColNames.AltAGL.getValue()).getValue(j);
                                 //this will store all the time values against the altitude
-                                time[p]=j;
-                                sumaltitude=sumaltitude + altitude[p];
-                                totaltime= totaltime +  time[p];
+                                time[p] = j;
+                                sumaltitude = sumaltitude + altitude[p];
+                                totaltime = totaltime +  time[p];
                                 p++;
                         }
                 }
@@ -158,10 +153,10 @@ public  class Enroute {
                 double  intercept = 0.0;
                 double  numerator = 0;
                 double  denominator = 0;
-                for (int k=0; k<length && offset+k < rowcount; k++) {
+                for (int k = 0; k < length && offset + k < rowcount; k++) {
 
                         numerator += (altitude[k] - mean_y) * (time[k] - mean_x);
-                        denominator += (time[k]-mean_x)*(time[k] -mean_x);
+                        denominator += (time[k] - mean_x) * (time[k] -mean_x);
                 }
                 //here final slope calculation for range is happening
                 slope = numerator/denominator;
@@ -174,16 +169,16 @@ public  class Enroute {
                 double y_pred = 0.0;
                 double r2 = 0.0;
                 
-                for (int i = 0; i < length && offset+i < rowcount; i++) {
+                /*for (int i = 0; i < length && offset+i < rowcount; i++) {
                 y_pred = intercept + slope * time[i];
                 actual = actual + (altitude[i] - mean_y) * (altitude[i] - mean_y);
                 estimated = estimated + (y_pred - mean_y) * (y_pred - mean_y);
                }
 
-               r2 = (estimated/actual);
-               LinearRegression LR = new LinearRegression();
+               r2 = (estimated/actual);*/
+ 	       LinearRegression LR = new LinearRegression();
                LR.slope = slope;
-               LR.rsquare = r2;
+               //LR.rsquare = r2;
 
                //System.out.println(" r value is " + r2);
                //here slope and rsquare values are returned to the getregression slope function 
@@ -193,10 +188,10 @@ public  class Enroute {
          }
 
 
-         class LinearRegression{
+         class LinearRegression {
 
                 public double slope = 0.0;
-                public double rsquare = 0.0;
+                //public double rsquare = 0.0;
 
          }
 }

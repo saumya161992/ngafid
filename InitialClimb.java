@@ -29,8 +29,7 @@ public class InitialClimb{
         public InitialClimb(int rows, ArrayList<FlightColumn> columns) {
 		this.rowcount = rows;
 		this.columnsList = columns;
-                this.starttime = 0;
-	        this.endtime = 0;	
+                
 		check(rowcount);
 		
 	}	
@@ -50,8 +49,8 @@ public class InitialClimb{
 
 	public ArrayList<Phase> check(int rowcount) {
 
-		//double altitude = 0.0;
-                //int  j = 0;
+		
+                int  j = 0;
                 
 		time = new ArrayList<Phase>();
 		
@@ -61,10 +60,8 @@ public class InitialClimb{
 			altitude = columnsList.get(ColNames.AltAGL.getValue()).getValue(j);
 
 			if (altitude > 35) {
-				starttime = j;
-				
-                                //Phase.startRow = starttime;
-				break;
+			       this. starttime = j;
+			       break;
 			}	
                         j++;			
                 }
@@ -74,11 +71,10 @@ public class InitialClimb{
 			altitude = columnsList.get(ColNames.AltAGL.getValue()).getValue(j);
                         
 			if (altitude >= 1000) {
-				endtime = j;
-				System.out.println("Initial climb started at time " + starttime + " and ended at time " + endtime);
-				//endRow = endtime;
+				this.endtime = j;
 				Phase currentphase = new Phase("InitialClimb", starttime, endtime);
                                 time.add(currentphase);
+								
 				break;
 			}
 		        j++;	
