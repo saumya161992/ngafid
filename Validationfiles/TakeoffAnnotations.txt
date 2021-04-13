@@ -26,15 +26,3 @@
 /home/saumya/saumya_ngafid/ngafid/TestData/c172_flight_16858.csv,3387,3394
 /home/saumya/saumya_ngafid/ngafid/TestData/c172_flight_16858.csv,3661,3667
 /home/saumya/saumya_ngafid/ngafid/TestData/c172_flight_16858.csv,3909,3912
-
-
-
-Phase started ----> 818Phase  ended at time 819 height 40.0
-Phase started ----> 1263Phase  ended at time 1264 height 88.0
-Phase started ----> 1652Phase  ended at time 1653 height 37.0
-Phase started ----> 2898Phase  ended at time 2899 height 74.0
-Phase started ----> 3141Phase  ended at time 3142 height 91.0
-Phase started ----> 3388Phase  ended at time 3393 height 41.0
-Phase started ----> 3670Phase  ended at time 3671 height 54.0
-Phase started ----> 3918Phase  ended at time 3919 height 64.0
-

@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 /*
  *this class is processing the data file
@@ -34,7 +34,8 @@ public class ProcessFlightFile {
 		ArrayList<ArrayList<Phase>> Allautomatedphases = new ArrayList<ArrayList<Phase>>() ;
 		ArrayList<Phase> humanPhases ;
 		ArrayList<Phase> automatedphases = new ArrayList();
-                
+                HashSet<String> flightfiles = new HashSet<String>();
+
 
 
 		String line1 = "";
@@ -43,29 +44,40 @@ public class ProcessFlightFile {
 			BufferedReader bufferedReadernew = new BufferedReader(new FileReader(new File(manualannotationtext)));
 			while ((line1 = bufferedReadernew.readLine()) != null) {
 
+                                
+				
 				//String line1 = "";
 				//read the first line of the file
 				//line1 = bufferedReader.readLine();
-				String[] columnNames1 = line1.split(",");
+				String[] aircraft = line1.split(",");
+				flightfiles.add(aircraft[0]);
+			}	
                                 
+		 } catch (IOException e) {
+                        //System.err.println("ERROR reading flight file: '" + columnNames1[0] + "'");
+                        e.printStackTrace();
+                        System.exit(1);
+                }
+
+	
 
 
 
+                for ( String file : flightfiles) {
 
+		try {
 
-				try {
+			//create a buffered reader given the filename (which requires creating a File and FileReader object beforehand)
+			BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(file)));
 
-					//create a buffered reader given the filename (which requires creating a File and FileReader object beforehand)
-					BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(columnNames1[0])));
+			String line = "";
 
-					String line = "";
+			//read the first line of the file
+			line = bufferedReader.readLine();
+			String[] columnNames = line.split(",");
 
-					//read the first line of the file
-					line = bufferedReader.readLine();
-					String[] columnNames = line.split(",");
-
-					//make an array list of FlightColumn objects which will
-					//hold the data for each column
+			//make an array list of FlightColumn objects which will
+			//hold the data for each column
 					ArrayList<FlightColumn> columns = new ArrayList<FlightColumn>();
 
 					//System.out.println("File columns are: ");
@@ -139,10 +151,12 @@ public class ProcessFlightFile {
 							//automatedphases = TT.check(numOfRows);
 							//System.out.println("the length is  "  + automatedphases.size());
 							Allautomatedphases.add(TT.check(numOfRows));
+							
 							humanAnnotations HCT  = new humanAnnotations(manualannotationtext,"TakeOff");
 
 							humanPhases = HCT.getAnnotationsFor(manualannotationtext);
 							Validation vcT = new Validation(numOfRows,  Allautomatedphases, humanPhases);
+							
 							break;
 						case 3: InitialClimb IC = new InitialClimb(numOfRows,columns);
 							//System.out.println(IC);
@@ -159,17 +173,14 @@ public class ProcessFlightFile {
 
 
 				} catch (IOException e) {
-					System.err.println("ERROR reading flight file: '" + columnNames1[0] + "'");
+					System.err.println("ERROR reading flight file: '" + file + "'");
 					e.printStackTrace();
 					System.exit(1);
 				}
 			}
-		} catch (IOException e) {
-			//System.err.println("ERROR reading flight file: '" + columnNames1[0] + "'");
-			e.printStackTrace();
-			System.exit(1);
-	        }
+		
+}
 
 
-	}
+	
 }
