@@ -54,7 +54,7 @@ public class ProcessFlightFile {
 			}	
                                 
 		 } catch (IOException e) {
-                        //System.err.println("ERROR reading flight file: '" + columnNames1[0] + "'");
+                        System.err.println("ERROR reading flight file: '" + manualannotationtext + "'");
                         e.printStackTrace();
                         System.exit(1);
                 }
@@ -65,19 +65,19 @@ public class ProcessFlightFile {
 
                 for ( String file : flightfiles) {
 
-		try {
+			try {
 
-			//create a buffered reader given the filename (which requires creating a File and FileReader object beforehand)
-			BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(file)));
+				//create a buffered reader given the filename (which requires creating a File and FileReader object beforehand)
+				BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(file)));
 
-			String line = "";
+				String line = "";
 
-			//read the first line of the file
-			line = bufferedReader.readLine();
-			String[] columnNames = line.split(",");
+				//read the first line of the file
+				line = bufferedReader.readLine();
+				String[] columnNames = line.split(",");
 
-			//make an array list of FlightColumn objects which will
-			//hold the data for each column
+				//make an array list of FlightColumn objects which will
+				//hold the data for each column
 					ArrayList<FlightColumn> columns = new ArrayList<FlightColumn>();
 
 					//System.out.println("File columns are: ");
@@ -152,17 +152,17 @@ public class ProcessFlightFile {
 							//System.out.println("the length is  "  + automatedphases.size());
 							Allautomatedphases.add(TT.check(numOfRows));
 							
-							humanAnnotations HCT  = new humanAnnotations(manualannotationtext,"TakeOff");
+							Humanannotations HCT  = new Humanannotations(manualannotationtext,"TakeOff");
 
 							humanPhases = HCT.getAnnotationsFor(manualannotationtext);
 							Validation vcT = new Validation(numOfRows,  Allautomatedphases, humanPhases);
 							
 							break;
 						case 3: InitialClimb IC = new InitialClimb(numOfRows,columns);
-							//System.out.println(IC);
+							
 							Allautomatedphases.add(IC.check(numOfRows));
 
-							humanAnnotations HC  = new humanAnnotations(manualannotationtext, "InitialCimb");
+							Humanannotations HC  = new Humanannotations(manualannotationtext, "InitialCimb");
 							humanPhases = HC.getAnnotationsFor(manualannotationtext);
 							Validation vc = new Validation(numOfRows,  Allautomatedphases, humanPhases);
 							break;	
@@ -179,7 +179,7 @@ public class ProcessFlightFile {
 				}
 			}
 		
-}
+	}	
 
 
 	

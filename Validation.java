@@ -56,15 +56,15 @@ public class Validation {
 
                                 		truepositives++;
 						count++;
-						System.out.println("here ");
+						
                         		}
                        			else if ((Math.abs(foundstart - actualstart ) > 10) && (Math.abs(foundend - actualend) < 10)) {
                             
                                 		falsepositives++;
 
-                       			} else {
+                       			} else if((truepositives + falsepositives) < humanPhases.size()) {
 
-						falsenegatives = (humanPhases.size() - truepositives );
+						falsenegatives = (humanPhases.size() - (truepositives + falsepositives) );
 		       			}	
                      
 				}

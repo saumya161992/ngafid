@@ -14,7 +14,6 @@ public class humanAnnotations {
 	public String filename;
    	public String phasename;
    	public ArrayList<Phase> annotations;
-   	//public Phase 
    	public int startRow;
    	public int endRow; 
 	
