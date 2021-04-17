@@ -111,9 +111,9 @@ public  class Enroute {
                          //System.out.println("altitude is " +altitude );
                          int val = k;
                          pointer++;
-			 //Range range = new Range(-1.0 ,1.0);
+			 
 			 if (current_slope > -1.0 && current_slope < 1.0 ) {
-			// if (range.contains(current_slope)) {
+			
 			
 				cruiseslopes.add(val); 
                          	System.out.println( "current slope is  " + current_slope + " at time " + val  );
