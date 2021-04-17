@@ -17,6 +17,8 @@ public  class Enroute {
 
         private static DecimalFormat df = new DecimalFormat("0.00");
         private int count = 0;
+	private int starttime = 0;
+	private int endtime = 0;
 	private int k = 0;
 	protected double height = 0;
         private int rowcount;// this is CSV file row count
@@ -25,6 +27,7 @@ public  class Enroute {
         double[] roundoffslope ;
         private ArrayList<Double> phasetransition = new ArrayList<>();//this arraylist will store those 20 altitudes against which transition is there
 	private ArrayList<Integer> cruiseslopes = new ArrayList();
+	private ArrayList<Phase> phasedetected = new ArrayList();
 
         /**
          * in the Enroute constructor we we pass the count of rows
@@ -68,7 +71,7 @@ public  class Enroute {
          *
          * @param rowcount is the number of rows in CSV file
          */
-         void check(int rowcount, int k) {
+         public ArrayList<Phase> check(int rowcount, int k) {
 
                  double previous_slopeprevious = 0.0;
                  double previous_slope = 0.0;
@@ -107,29 +110,40 @@ public  class Enroute {
 
                          current_slope = temp.slope;
                          //current_rsquare = temp.rsquare;
-                        // double altitude = columnsList.get(ColNames.AltAGL.getValue()).getValue(pointer);
+                         //double altitude = columnsList.get(ColNames.AltAGL.getValue()).getValue(k);
                          //System.out.println("altitude is " +altitude );
                          int val = k;
+			 double altitude = columnsList.get(ColNames.AltAGL.getValue()).getValue(val);
+
                          pointer++;
 			 
-			 if (current_slope > -1.0 && current_slope < 1.0 ) {
+			 if (current_slope > -1.0 && current_slope < 1.0 && altitude >= 1000 ) {
 			
 			
 				cruiseslopes.add(val); 
-                         	System.out.println( "current slope is  " + current_slope + " at time " + val  );
+                         	//System.out.println( "current slope is  " + current_slope + " at time " + val + " at altitude " + altitude  );
 
 			 } else {
 
                          	int size = cruiseslopes.size();
-			 	if (size >= 360) {
+			 	if (size >= 300) {
 				     
-					System.out.println("cruise found starting at  " + cruiseslopes.get(0) + " ending at " + cruiseslopes.get(size-1));
-			     	}       
+					
+                                        starttime = 150 +  cruiseslopes.get(0)  ;
+					endtime = 150 + cruiseslopes.get(size-1)  ;
+					System.out.println("cruise found starting at  " + starttime + " ending at " + endtime);
+
+					Phase currentphase = new Phase("Cruise", starttime, endtime);
+                                        phasedetected.add(currentphase);
+                               
+				}       
 			        
 				cruiseslopes.clear();
 			     
 		        }	     
                  }
+
+		 return phasedetected;
          }
          /**
           * here slope for altitude against time is

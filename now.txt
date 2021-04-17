@@ -1,0 +1,6 @@
+ number of rows in CSV file are 5862
+Enter phase type 1 for identifying Transition from standing phase to taxi phase and type 2 to identify Transition from taxi to takeoff phase
+ row count is 5862
+cruise found starting at  1236 ending at 2450
+cruise found starting at  3640 ending at 4017
+cruise found starting at  4238 ending at 4632

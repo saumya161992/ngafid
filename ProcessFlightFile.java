@@ -167,6 +167,9 @@ public class ProcessFlightFile {
 							Validation vc = new Validation(numOfRows,  Allautomatedphases, humanPhases);
 							break;	
 						case 4: Enroute EN = new Enroute(numOfRows,columns);
+							
+							//Allautomatedphases.add(EN.check(numOfRows));
+
 							break;	
 						default:break;
 					}	
