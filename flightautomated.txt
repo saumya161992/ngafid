@@ -1,60 +1,22 @@
  number of rows in CSV file are 5742
-Enter phase type 1 for identifying Transition from standing phase to taxi phase and type 2 to identify Transition from taxi to takeoff phase
+
 Phase started ----> 781Phase  ended at time 784 height 51.0
 Phase started ----> 4252Phase  ended at time 4258 height 36.0
-for null
-Phase started ----> 781Phase  ended at time 784 height 51.0
-Phase started ----> 4252Phase  ended at time 4258 height 36.0
- number of rows in CSV file are 6015
-Enter phase type 1 for identifying Transition from standing phase to taxi phase and type 2 to identify Transition from taxi to takeoff phase
 Phase started ----> 964Phase  ended at time 968 height 44.0
 Phase started ----> 5388Phase  ended at time 5391 height 38.0
-for null
-Phase started ----> 964Phase  ended at time 968 height 44.0
-Phase started ----> 5388Phase  ended at time 5391 height 38.0
- number of rows in CSV file are 4900
-Enter phase type 1 for identifying Transition from standing phase to taxi phase and type 2 to identify Transition from taxi to takeoff phase
 Phase started ----> 1097Phase  ended at time 1107 height 43.0
 Phase started ----> 3409Phase  ended at time 3413 height 35.0
 Phase started ----> 3753Phase  ended at time 3757 height 37.0
 Phase started ----> 4093Phase  ended at time 4098 height 46.0
-for null
-Phase started ----> 1097Phase  ended at time 1107 height 43.0
-Phase started ----> 3409Phase  ended at time 3413 height 35.0
-Phase started ----> 3753Phase  ended at time 3757 height 37.0
-Phase started ----> 4093Phase  ended at time 4098 height 46.0
- number of rows in CSV file are 4875
-Enter phase type 1 for identifying Transition from standing phase to taxi phase and type 2 to identify Transition from taxi to takeoff phase
-Phase started ----> 0Phase  ended at time 955 height 43.0
 Phase started ----> 2365Phase  ended at time 2366 height 72.0
 Phase started ----> 2650Phase  ended at time 2651 height 74.0
 Phase started ----> 2956Phase  ended at time 2957 height 104.0
-for null
-Phase started ----> 2365Phase  ended at time 2366 height 72.0
-Phase started ----> 2650Phase  ended at time 2651 height 74.0
-Phase started ----> 2956Phase  ended at time 2957 height 104.0
- number of rows in CSV file are 5556
-Enter phase type 1 for identifying Transition from standing phase to taxi phase and type 2 to identify Transition from taxi to takeoff phase
 Phase started ----> 920Phase  ended at time 925 height 35.0
-for null
-Phase started ----> 920Phase  ended at time 925 height 35.0
- number of rows in CSV file are 5382
-Enter phase type 1 for identifying Transition from standing phase to taxi phase and type 2 to identify Transition from taxi to takeoff phase
 Phase started ----> 714Phase  ended at time 716 height 40.0
 Phase started ----> 4286Phase  ended at time 4295 height 50.0
 Phase started ----> 4604Phase  ended at time 4613 height 37.0
 Phase started ----> 4901Phase  ended at time 4914 height 38.0
-for null
-Phase started ----> 714Phase  ended at time 716 height 40.0
-Phase started ----> 4286Phase  ended at time 4295 height 50.0
-Phase started ----> 4604Phase  ended at time 4613 height 37.0
-Phase started ----> 4901Phase  ended at time 4914 height 38.0
- number of rows in CSV file are 4361
-Enter phase type 1 for identifying Transition from standing phase to taxi phase and type 2 to identify Transition from taxi to takeoff phase
 Phase started ----> 0Phase  ended at time 927 height 40.0
-for null
- number of rows in CSV file are 5566
-Enter phase type 1 for identifying Transition from standing phase to taxi phase and type 2 to identify Transition from taxi to takeoff phase
 Phase started ----> 818Phase  ended at time 819 height 40.0
 Phase started ----> 1263Phase  ended at time 1264 height 88.0
 Phase started ----> 1652Phase  ended at time 1653 height 37.0
@@ -63,12 +25,33 @@ Phase started ----> 3141Phase  ended at time 3142 height 91.0
 Phase started ----> 3388Phase  ended at time 3393 height 41.0
 Phase started ----> 3670Phase  ended at time 3671 height 54.0
 Phase started ----> 3918Phase  ended at time 3919 height 64.0
-for null
-Phase started ----> 818Phase  ended at time 819 height 40.0
-Phase started ----> 1263Phase  ended at time 1264 height 88.0
-Phase started ----> 1652Phase  ended at time 1653 height 37.0
-Phase started ----> 2898Phase  ended at time 2899 height 74.0
-Phase started ----> 3141Phase  ended at time 3142 height 91.0
-Phase started ----> 3388Phase  ended at time 3393 height 41.0
-Phase started ----> 3670Phase  ended at time 3671 height 54.0
-Phase started ----> 3918Phase  ended at time 3919 height 64.0
+
+/home/saumya/saumya_ngafid/ngafid/TestData/pa28_flight_16702.csv,780,783
+/home/saumya/saumya_ngafid/ngafid/TestData/pa28_flight_16702.csv,3953,3957
+/home/saumya/saumya_ngafid/ngafid/TestData/pa28_flight_16702.csv,4256,4258
+/home/saumya/saumya_ngafid/ngafid/TestData/pa28_flight_16703.csv,965,968
+/home/saumya/saumya_ngafid/ngafid/TestData/pa28_flight_16703.csv,5387,5392
+/home/saumya/saumya_ngafid/ngafid/TestData/pa28_flight_16704.csv,1102,1107
+/home/saumya/saumya_ngafid/ngafid/TestData/pa28_flight_16704.csv,3406,3414
+/home/saumya/saumya_ngafid/ngafid/TestData/pa28_flight_16704.csv,3751,3758
+/home/saumya/saumya_ngafid/ngafid/TestData/pa28_flight_16704.csv,4093,4098
+/home/saumya/saumya_ngafid/ngafid/TestData/flight_0.csv,951,956
+/home/saumya/saumya_ngafid/ngafid/TestData/flight_0.csv,2356,2363
+/home/saumya/saumya_ngafid/ngafid/TestData/flight_0.csv,2641,2648
+/home/saumya/saumya_ngafid/ngafid/TestData/flight_0.csv,2948,2951
+/home/saumya/saumya_ngafid/ngafid/TestData/flight_0.csv,3498,3506
+/home/saumya/saumya_ngafid/ngafid/TestData/pa44_flight_17261.csv,917,925
+/home/saumya/saumya_ngafid/ngafid/TestData/pa44_flight_17270.csv,706,717
+/home/saumya/saumya_ngafid/ngafid/TestData/pa44_flight_17270.csv,4292,4296
+/home/saumya/saumya_ngafid/ngafid/TestData/pa44_flight_17270.csv,4611,4614
+/home/saumya/saumya_ngafid/ngafid/TestData/pa44_flight_17270.csv,4910,4915
+/home/saumya/saumya_ngafid/ngafid/TestData/c172_flight_16856.csv,922,927
+/home/saumya/saumya_ngafid/ngafid/TestData/c172_flight_16858.csv,813,820
+/home/saumya/saumya_ngafid/ngafid/TestData/c172_flight_16858.csv,1252,1256
+/home/saumya/saumya_ngafid/ngafid/TestData/c172_flight_16858.csv,1642,1650
+/home/saumya/saumya_ngafid/ngafid/TestData/c172_flight_16858.csv,2888,2891
+/home/saumya/saumya_ngafid/ngafid/TestData/c172_flight_16858.csv,3131,3136
+/home/saumya/saumya_ngafid/ngafid/TestData/c172_flight_16858.csv,3387,3394
+/home/saumya/saumya_ngafid/ngafid/TestData/c172_flight_16858.csv,3661,3667
+/home/saumya/saumya_ngafid/ngafid/TestData/c172_flight_16858.csv,3909,3912
+

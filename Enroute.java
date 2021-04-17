@@ -22,8 +22,9 @@ public  class Enroute {
         private int rowcount;// this is CSV file row count
         private ArrayList<FlightColumn> columnsList; //this will be used to read Columns arraylist generated in ProcessFlightFile
         double slope = 0.0;//this will save all calculated slopes
-        double[] roundoffslope = new double[602];
+        double[] roundoffslope ;
         private ArrayList<Double> phasetransition = new ArrayList<>();//this arraylist will store those 20 altitudes against which transition is there
+	private ArrayList<Integer> cruiseslopes = new ArrayList();
 
         /**
          * in the Enroute constructor we we pass the count of rows
@@ -34,20 +35,25 @@ public  class Enroute {
          * @param columns is the arraylist to that holds all values of CVS
          */
         public Enroute(int rows, ArrayList<FlightColumn> columns) {
+		System.out.println(" row count is " + rows);
                 this.rowcount = rows;
                 this.columnsList = columns;
 		int count = ((int)this.rowcount/300)+1;
-                double[] roundoffslope = new double[602];
+                double[] roundoffslope = new double[rows];
 		while (k < rowcount) {
 
                         height = columnsList.get(ColNames.AltAGL.getValue()).getValue(k);
 
                         if (height >= 1000) {
-                        	break;
+                        	
+				break;
                         }
-                        k++;
 		
-                }
+                        k++;
+			
+
+		
+		}
 
                 
 		//here we call check function to identify if there is a transition from initial climb to Enroute phase
@@ -64,7 +70,7 @@ public  class Enroute {
          */
          void check(int rowcount, int k) {
 
-                 double previous_slopeprevious =+ 0.0;
+                 double previous_slopeprevious = 0.0;
                  double previous_slope = 0.0;
                  double previous_rsquare = 0.0;
                  double current_rsquare = 0.0;
@@ -76,38 +82,54 @@ public  class Enroute {
                  String filepath = "/home/saumya/saumya_ngafid/ngafid/output.csv";
                  File file = new File(filepath);
 
-                 while (i < rowcount) {
+                 while (k < (rowcount - 1 )) {
                    
-                         if (i == 0) {
+                         if (k == 0) {
 
-                                 LinearRegression temp = getRegressionSlope(rowcount, i+k, 300);
+                                 LinearRegression temp = getRegressionSlope(rowcount, k, 300);
                                  //this will store the first clculated slope
                                  
                                  previous_slope = temp.slope;
                
 	       		//	 previous_rsquare = temp.rsquare;
-                         } else{
+                         } else {
 
                                  //this will store the previous slope
                                  previous_slopeprevious = previous_slope;
                                  previous_slope = current_slope;
                           //       previous_rsquare = current_rsquare;
                          }
-                         i = i+1;
-                         LinearRegression temp = getRegressionSlope(rowcount, i+k , 300);
+
+                         k = k+1;
+
+                         LinearRegression temp = getRegressionSlope(rowcount, k , 300);
                          //here the current calculated slope is stored
 
                          current_slope = temp.slope;
                          //current_rsquare = temp.rsquare;
                         // double altitude = columnsList.get(ColNames.AltAGL.getValue()).getValue(pointer);
                          //System.out.println("altitude is " +altitude );
-                         int val = i+k;
+                         int val = k;
                          pointer++;
-			 //if(current_slope > 0.0) {
-                         	System.out.println( "current slope is  " + current_slope + " at time " + val +    " , " + " previous slope is " +  previous_slope );
-			 //}
+			 //Range range = new Range(-1.0 ,1.0);
+			 if (current_slope > -1.0 && current_slope < 1.0 ) {
+			// if (range.contains(current_slope)) {
+			
+				cruiseslopes.add(val); 
+                         	System.out.println( "current slope is  " + current_slope + " at time " + val  );
 
-                   }
+			 } else {
+
+                         	int size = cruiseslopes.size();
+			 	if (size >= 360) {
+				     
+					System.out.println("cruise found starting at  " + cruiseslopes.get(0) + " ending at " + cruiseslopes.get(size-1));
+			     	}       
+			        
+				cruiseslopes.clear();
+			     
+		        }	     
+                 }
          }
          /**
           * here slope for altitude against time is
@@ -155,8 +177,9 @@ public  class Enroute {
                 double  denominator = 0;
                 for (int k = 0; k < length && offset + k < rowcount; k++) {
 
-                        numerator += (altitude[k] - mean_y) * (time[k] - mean_x);
-                        denominator += (time[k] - mean_x) * (time[k] -mean_x);
+			numerator += (altitude[k] - mean_y) * (time[k] - mean_x);
+                        denominator += (time[k] - mean_x) * (time[k] - mean_x);
+
                 }
                 //here final slope calculation for range is happening
                 slope = numerator/denominator;
