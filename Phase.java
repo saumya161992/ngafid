@@ -4,9 +4,10 @@ public class Phase {
 	int startRow;
 	int endRow;   ///make a constructor
         
-	/** This constructs a new Phase  object with a given name and
-         *  initializes it's start time and end time with startrow
-	 *  and end row of the CSV file
+	/** 
+	 * This constructs a new Phase  object with a given name and
+         * initializes it's start time and end time with startrow
+	 * and end row of the CSV file
          * @param phaseName is the name of the phase which is detected 
 	 * @param startRow is the time when phase identified starts
          * @param endRow is the time when phase identified ends

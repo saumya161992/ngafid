@@ -211,7 +211,7 @@ public  class Enroute {
 	  *
           * @param rowcount is the total number of rows in CSV
           * @param offset is the start index  of time and altitude
-          * @param lenght is the range uptil will slope will be calculated
+          * @param length is the range uptil will slope will be calculated
           * @return this is the calculted slope which will be returned to check function
           */
           public LinearRegression getRegressionSlope(int rowcount, int offset, int length) {

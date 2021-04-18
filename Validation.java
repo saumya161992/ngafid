@@ -20,7 +20,8 @@ public class Validation {
    	//algorith didn't detect but is done by user manually
    	int falsenegatives = 0;
 
-	/** here row count of each csv file is initialized and then
+	/**
+	 * here row count of each csv file is initialized and then
 	 * automatedPhases arraylist and human annotated arraylist
 	 * is initialized to arraylist returned from humanannotations
 	 * and automated phase(for each phase type) which is used for
@@ -42,7 +43,8 @@ public class Validation {
 
    	}	   
 
-	/** here humanannotations and automatedphases arraylist is
+	/**
+	 * here humanannotations and automatedphases arraylist is
 	 * passed for validating correctness of each phase and then
 	 * truepositives, falsepositives and falsenegatives are caculated
 	 */ 
