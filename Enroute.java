@@ -19,6 +19,10 @@ public  class Enroute {
         private int count = 0;
 	private int starttime = 0;
 	private int endtime = 0;
+	private double curraltitude = 0.0;
+	private double prevaltitude = 0.0;
+	private int timestamp = 0;
+	private int index = 0;
 	private int k = 0;
 	protected double height = 0;
         private int rowcount;// this is CSV file row count
@@ -135,9 +139,35 @@ public  class Enroute {
 
 					Phase currentphase = new Phase("Cruise", starttime, endtime);
                                         phasedetected.add(currentphase);
+                                        
+					timestamp = endtime;
+					index = 0;
+                                        System.out.println("end time is  " + timestamp);
+                                        curraltitude = altitude;
+					while (curraltitude > 1000) { 
+					        
+						prevaltitude = curraltitude;
+						timestamp = timestamp + 1;
+						curraltitude = columnsList.get(ColNames.AltAGL.getValue()).getValue(timestamp) ;
+	                                        if (curraltitude >  prevaltitude) {
+						       index++;
+					        
+					        }
+						//System.out.println("current altitude is " + curraltitude + " at timestamp " + timestamp + " prevaltitude is " + prevaltitude);
+						if (index > 200) {
+							System.out.println( " flight not yet descending " );
+							break;
+					        }		
+
+				       }
+				       if (curraltitude <= 1000) {
+
+		                                System.out.println("timestamp for descend to end is " + timestamp); 		       
+				       }  		
                                
 				}       
 			        
+
 				cruiseslopes.clear();
 			     
 		        }	     
