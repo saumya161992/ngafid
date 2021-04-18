@@ -14,7 +14,7 @@ public  class Standing {
 	/**
 	 * in this constructor we extract all values in the CSV and 
 	 * rowcount and then check function is called to identify transition 
-	 * from standing to Taxi phase  
+	 * from Standing phase to Taxi phase
 	 * @param columns is an arraylist for all values in CSV
 	 * @param rows is the row count of number of rows in CSV file 
 	 */
@@ -48,6 +48,9 @@ public  class Standing {
 	        	}
                 	j++;       
 		}
+
+	
+
 	}		 
      
 

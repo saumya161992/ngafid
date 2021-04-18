@@ -39,7 +39,7 @@ public enum ColNames{
 	private final int _idx;
 
 	/**
- 	* this will store store the index of enum 
+ 	* this will store the index of enum 
  	* column names
  	* @param  _idx will store index of columnname for future reference
  	*/

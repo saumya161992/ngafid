@@ -11,15 +11,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.HashSet;
 import java.util.stream.Collectors;
-/*
- *this class is processing the data file
- * and storee the phase and  ranges 
- *inside the hashmap of string and arraylist
- *
+
+
+/**
+ * this class is processing the data file
+ * and stores the detected phase and ranges 
+ * of start and end of each phase inside
+ * arraylist after retrieving all flight 
+ * files from manual annotations text file
  */
 public class ProcessFlightFile {
 	public static void main(String[] arguments) {
-		//make sure that one command line argument is given and
+		//make sure that two command line argument is given and
 		//print an error message and quit if not
 		if (arguments.length != 2) {
 			System.err.println("ERROR: did not specify proper command line arguments, usage:");
@@ -27,31 +30,28 @@ public class ProcessFlightFile {
 			System.exit(1);
 		}
 
-		//The first command line argument will be the flight filename
-		//String flightFilename = arguments[0];
+		//The first command line argument will be the manual flight filename and second is type of phase
 		String phasetype = arguments[1];
 		String manualannotationtext = arguments[0];
-		ArrayList<ArrayList<Phase>> Allautomatedphases = new ArrayList<ArrayList<Phase>>() ;
-		ArrayList<Phase> humanPhases ;
-		ArrayList<Phase> automatedphases = new ArrayList();
-                HashSet<String> flightfiles = new HashSet<String>();
+		ArrayList<ArrayList<Phase>> Allautomatedphases = new ArrayList<ArrayList<Phase>>() ; // this will store all phases detected  by automated phasetype algorithm for all flight file
+		ArrayList<Phase> humanPhases ; // this will store all phases for all flight files detected manually
+		ArrayList<Phase> automatedphases = new ArrayList(); // this will store phases returned for each flight file by automated phasetype algorithm
+		HashSet<String> flightfiles = new HashSet<String>(); //this is used so that repeated names of flightfiles are not stored from manual annotation file.
 
 
 
 		String line1 = "";
 		try {
-
+                        
 			BufferedReader bufferedReadernew = new BufferedReader(new FileReader(new File(manualannotationtext)));
 			while ((line1 = bufferedReadernew.readLine()) != null) {
 
-                                
-				
-				//String line1 = "";
-				//read the first line of the file
-				//line1 = bufferedReader.readLine();
+                                //reads each line of manual annotations file
 				String[] aircraft = line1.split(",");
 				flightfiles.add(aircraft[0]);
 			}	
+			bufferedReader.close();
+
                                 
 		 } catch (IOException e) {
                         System.err.println("ERROR reading flight file: '" + manualannotationtext + "'");
@@ -72,12 +72,12 @@ public class ProcessFlightFile {
 
 				String line = "";
 
-				//read the first line of the file
+				//read the first line of the flight file
 				line = bufferedReader.readLine();
 				String[] columnNames = line.split(",");
 
-				//make an array list of FlightColumn objects which will
-				//hold the data for each column
+					//make an array list of FlightColumn objects which will
+					//hold the data for each column
 					ArrayList<FlightColumn> columns = new ArrayList<FlightColumn>();
 
 					//System.out.println("File columns are: ");
@@ -104,7 +104,7 @@ public class ProcessFlightFile {
 
 						//we know that there should be the same number of
 						//values in each line as there are flight columms
-						//so we can interate over each of them
+						//so we can iterate over each of them
 						for (int i = 0; i < valueStrings.length; i++) {
 							//System.out.println("\t" + value);
 
@@ -122,25 +122,24 @@ public class ProcessFlightFile {
 					}
 					bufferedReader.close();
 					int j=0;
-					/*for(FlightColumn column : columns){
-					  j=j+1;
-					  System.out.println("\t\n" +  column );
-					  }*/
-
-					//after the file has been read print out all the
-					//FlightColumns
+					
 
 					/**
-					 * creating phase array of different 
-					 * types of phases
-					 *
-					 **/
+					 * here we create an object of each annotated phase type 
+					 * class for each flight file and then check function inside
+					 * annotated phase type is called which returns all detected 
+					 * phases which are stored in allautomated arraylist
+					 * next all detected phases from manual annotations files
+					 * are stored in humanannotations arraylist
+					 * next we create an object of validate class to validate
+					 * number of phases which are detected correctly
+					 */
 					//String[] phasetypes = {"Standing", "Taxi", "InitialClimb" };
 					int numOfRows = columns.get(0).getSize();
 					System.out.println(" number of rows in CSV file are " + numOfRows);
 					// here we pass row count and columns arraylist to standing class
-					System.out.println("Enter phase type 1 for identifying Transition from standing phase to taxi phase and type 2 to identify Transition from taxi to takeoff phase");
-					//Scanner sc=new Scanner(System.in);
+					System.out.println("Enter phase type 1 for standing phase  and type 2 to identify Transition from taxi to takeoff phase and 3 for Initial Climb phase and 4 for Enroute phase ");
+					
 
 					int type = Integer.valueOf(phasetype);
 					switch(type) {

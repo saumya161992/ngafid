@@ -7,14 +7,14 @@ public class FlightColumn {
     private ArrayList<Double> values;
 
     /**
-     * This constructrs a new FlightColumn object with a given name and
+     * This constructs a new FlightColumn object with a given name and
      * initializes it's values ArrayList to an empty ArrayList.
      *
      * @param name is the name of the column from the data file that
      * this object will hold the values for
      */
     public FlightColumn(String name) {
-         this.name = name;
+        this.name = name;
         values = new ArrayList<Double>();
     }
 
@@ -44,7 +44,7 @@ public class FlightColumn {
      */
     
     public String getName(){
-	   return this.name;
+	return this.name;
     }
    
     /**
@@ -53,7 +53,7 @@ public class FlightColumn {
      * @return the size of the column ArrayList
      */
     public int getSize(){
-	  return this.values.size();
+        return this.values.size();
     } 
 
     /**
