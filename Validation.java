@@ -20,6 +20,15 @@ public class Validation {
    	//algorith didn't detect but is done by user manually
    	int falsenegatives = 0;
 
+	/** here row count of each csv file is initialized and then
+	 * automatedPhases arraylist and human annotated arraylist
+	 * is initialized to arraylist returned from humanannotations
+	 * and automated phase(for each phase type) which is used for
+	 * for validating correctly detected phases
+	 * @param rows number of rows in csv file
+	 * @param automatedPhases stored phases detected through automated algorithm
+	 * @param humanPhases stored phases detected manually
+	 */
    	public Validation (int rows, ArrayList<ArrayList<Phase>> automatedPhases, ArrayList<Phase> humanPhases) {
 
    		this.rows = rows;
@@ -32,6 +41,11 @@ public class Validation {
 		Validation(humanPhases, automatedPhases); 
 
    	}	   
+
+	/** here humanannotations and automatedphases arraylist is
+	 * passed for validating correctness of each phase and then
+	 * truepositives, falsepositives and falsenegatives are caculated
+	 */ 
 	
    	public void Validation(ArrayList<Phase> humanPhases, ArrayList<ArrayList<Phase>> automatedPhases) {
 

@@ -17,14 +17,31 @@ public class Humanannotations {
         public int startRow;
         public int endRow;
 
+	/** here manualannotations text file is passes
+	 *  and the name of the phase for which
+	 *  manual annotations is created is passed
+	 *  and then text file name and phase name is
+	 *  initialized
+	 *  @param annotationsFilename name of text file
+	 *  @param name is the phase for which annotations are done
+	 */  
+
         public Humanannotations( String anotationsFilename, String name) {
 
                 this.filename = anotationsFilename;
                 this.phasename = name;
-                //annotations = new ArrayList<Phase>();
+                
+	}
 
-
-        }
+	/** here file name is passed and each line of text file
+	 *  is read to store detected phase
+	 *  first phase object will be created to store detected phase
+	 *  and then the phase detected will be stored in annotations 
+	 *  arrylist
+	 *  @param annotationsFilename is the name of the textfile storing 
+	 *  phase name and start and end time of each phase detected
+	 *  @return returns arraylist of human annotated phases
+	 */ 
 
         public ArrayList<Phase> getAnnotationsFor(String annotationFilename) {
 
@@ -60,7 +77,6 @@ public class Humanannotations {
                                 annotations.add(phasedetected);
                         }
 
-                        //      return annotations; 
                 } catch (IOException e) {
                         System.err.println("ERROR reading flight file: '" + annotationFilename + "'");
                         e.printStackTrace();

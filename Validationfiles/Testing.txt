@@ -1,16 +1,1 @@
-/home/saumya/saumya_ngafid/ngafid/TestData/pa44_flight_17261.csv,2356,2363
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/home/saumya/saumya_ngafid/ngafid/TestData/pa28_flight_16704.csv,2356,2363

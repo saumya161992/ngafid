@@ -9,8 +9,9 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 /**
- * this class will identify where enroute
- * is starting
+ * this class will identify cruise and descend phase
+ * and store phase name and start and end time of the 
+ * phase
  */
 
 public  class Enroute {
@@ -29,15 +30,16 @@ public  class Enroute {
         private ArrayList<FlightColumn> columnsList; //this will be used to read Columns arraylist generated in ProcessFlightFile
         double slope = 0.0;//this will save all calculated slopes
         double[] roundoffslope ;
-        private ArrayList<Double> phasetransition = new ArrayList<>();//this arraylist will store those 20 altitudes against which transition is there
-	private ArrayList<Integer> cruiseslopes = new ArrayList();
-	private ArrayList<Phase> phasedetected = new ArrayList();
+        private ArrayList<Double> phasetransition = new ArrayList<>();
+	private ArrayList<Integer> cruiseslopes = new ArrayList(); // this will temporarily store the time  values if slope for 300 values at a time is found in range (-1 to 1) 
+	private ArrayList<Phase> phasedetected = new ArrayList(); // this stores all detected phases
 
         /**
          * in the Enroute constructor we we pass the count of rows
          * in a CSV file for execution at that time and the arraylist 
          * which has all the values of csv file and post this check function 
-         * is call to identify the takeoff phase
+         * is call to identify cruise and descend  phase
+	 *
          * @param rows is the count of rows in CSV file
          * @param columns is the arraylist to that holds all values of CVS
          */
@@ -47,9 +49,16 @@ public  class Enroute {
                 this.columnsList = columns;
 		int count = ((int)this.rowcount/300)+1;
                 double[] roundoffslope = new double[rows];
+
+		/**
+		 * while loop will look for time at which initial climb ends 
+		 * and then we pass the time value to the check function so 
+		 * that slope is calculated from that time onwards
+		 */
+
 		while (k < rowcount) {
 
-                        height = columnsList.get(ColNames.AltAGL.getValue()).getValue(k);
+                	height = columnsList.get(ColNames.AltAGL.getValue()).getValue(k);
 
                         if (height >= 1000) {
                         	
@@ -71,7 +80,7 @@ public  class Enroute {
          * here we call get regression slope function to calculate
          * the slopes and then compare the previous slope to the new 
          * slope and then the check condition will validate the transition
-         * to takeoff phase
+         * to cruise and descend  phase
          *
          * @param rowcount is the number of rows in CSV file
          */
@@ -91,20 +100,20 @@ public  class Enroute {
 
                  while (k < (rowcount - 1 )) {
                    
-                         if (k == 0) {
+                 	if (k == 0) {
 
                                  LinearRegression temp = getRegressionSlope(rowcount, k, 300);
                                  //this will store the first clculated slope
                                  
                                  previous_slope = temp.slope;
                
-	       		//	 previous_rsquare = temp.rsquare;
-                         } else {
+	       	
+                        } else {
 
-                                 //this will store the previous slope
-                                 previous_slopeprevious = previous_slope;
-                                 previous_slope = current_slope;
-                          //       previous_rsquare = current_rsquare;
+                        	//this will store the previous slope
+                                previous_slopeprevious = previous_slope;
+                                previous_slope = current_slope;
+                          //    previous_rsquare = current_rsquare;
                          }
 
                          k = k+1;
@@ -121,6 +130,7 @@ public  class Enroute {
 
                          pointer++;
 			 
+			 //this condition will calculate slope values within(-1 to 1) and then store them in cruiseslopes arraylist temporarily
 			 if (current_slope > -1.0 && current_slope < 1.0 && altitude >= 1000 ) {
 			
 			
@@ -129,21 +139,38 @@ public  class Enroute {
 
 			 } else {
 
+				//below condition detects if cruise phase takes place
+				//it will take place when slope values are in range (-1 to 1) for minimum 5 minutes 
+
                          	int size = cruiseslopes.size();
 			 	if (size >= 300) {
 				     
 					
-                                        starttime = 150 +  cruiseslopes.get(0)  ;
-					endtime = 150 + cruiseslopes.get(size-1)  ;
+                                        starttime = 150 +  cruiseslopes.get(0)  ; //start time is mean of total time
+					endtime = 150 + cruiseslopes.get(size-1)  ; // endtime is mean of total time
 					System.out.println("cruise found starting at  " + starttime + " ending at " + endtime);
 
 					Phase currentphase = new Phase("Cruise", starttime, endtime);
-                                        phasedetected.add(currentphase);
+                                        phasedetected.add(currentphase); //this will keep on adding all detected cruise phases for a flight file
                                         
-					timestamp = endtime;
+					timestamp = endtime; // here we initialize timestamp to endtime of detected cruise phase 
 					index = 0;
                                         System.out.println("end time is  " + timestamp);
-                                        curraltitude = altitude;
+                                        curraltitude = altitude; // we initialize curraltitude to the altitude of endtime which is where the current cruise ends
+
+                                        /**
+					 * here we look for descend phase to take place
+					 * so we compare previous altitude at a timestamp
+					 * to altitude at timestamp + 1 and then if altitude
+					 * is not found to be decreasing for maximum 200 seconds
+					 * then descend place has not taken place so we break the
+					 * loop to look for next cruise phase at timestamp after 
+					 * currently dectected endtime of cruise phase else if
+					 * descend is taking place, starttime of detected descend is saved and 
+					 * the loop iterates to look for timestamp at which altitude of 1000 is 
+					 * reached which will be the end time of descend
+					 */
+
 					while (curraltitude > 1000) { 
 					        
 						prevaltitude = curraltitude;
@@ -168,18 +195,20 @@ public  class Enroute {
 				}       
 			        
 
-				cruiseslopes.clear();
+				cruiseslopes.clear(); // arraylist is cleared to store time values for next cruise phase
 			     
 		        }	     
                  }
 
-		 return phasedetected;
+		 return phasedetected; //returns an arraylist for validation of all detected phases to process flight file class
          }
+
          /**
           * here slope for altitude against time is
           * getting calculated which will be returned 
           * to check function for identifying if their 
           * is a transition to Takeoff phase
+	  *
           * @param rowcount is the total number of rows in CSV
           * @param offset is the start index  of time and altitude
           * @param lenght is the range uptil will slope will be calculated
@@ -188,21 +217,21 @@ public  class Enroute {
           public LinearRegression getRegressionSlope(int rowcount, int offset, int length) {
 
 
-                 double mean_x = 0.0;// this will store mean of time
-                 double mean_y = 0.0;//this will store mean of altitude
-                 double totaltime = 0.0;
-                 double[] altitude = new double[300];//will store all the altitude values for the defined range from start index
-                 int[] time = new int[300];//this will store all the time values for the defined range from start index 
-                 int p = 0;
-                 double sumaltitude = 0.0;
-                 Arrays.fill(altitude, 0);//this will initialize altitude array with zero
-                 Arrays.fill(time, 0);//this will initilize time arry with zero
+		double mean_x = 0.0;// this will store mean of time
+                double mean_y = 0.0;//this will store mean of altitude
+                double totaltime = 0.0;
+                double[] altitude = new double[300];//will store all the altitude values for the defined range from start index
+                int[] time = new int[300];//this will store all the time values for the defined range from start index 
+                int p = 0;
+                double sumaltitude = 0.0;
+                Arrays.fill(altitude, 0);//this will initialize altitude array with zero
+                Arrays.fill(time, 0);//this will initilize time arry with zero
 
-                for (int j = offset; j < offset + length; j++)
-                {
-                        if (j < rowcount) {
+                for (int j = offset; j < offset + length; j++) {
+
+                	if (j < rowcount) {
                                 //this is used to fetch altitude in CSV at a given index
-                                altitude[p] = columnsList.get(ColNames.AltAGL.getValue()).getValue(j);
+                        	altitude[p] = columnsList.get(ColNames.AltAGL.getValue()).getValue(j);
                                 //this will store all the time values against the altitude
                                 time[p] = j;
                                 sumaltitude = sumaltitude + altitude[p];
@@ -219,6 +248,7 @@ public  class Enroute {
                 double  intercept = 0.0;
                 double  numerator = 0;
                 double  denominator = 0;
+
                 for (int k = 0; k < length && offset + k < rowcount; k++) {
 
 			numerator += (altitude[k] - mean_y) * (time[k] - mean_x);

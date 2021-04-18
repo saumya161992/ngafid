@@ -3,7 +3,7 @@ import java.util.Arrays;
 
 /**
  * this class will identify start and end of
- *initial climb phase for all flight 
+ * initial climb phase for all flight 
  * files
  */
 
@@ -15,7 +15,7 @@ public class InitialClimb{
 	private int endtime = 0;
 	private int j = 0;
 	private double altitude = 0.0;
-        public ArrayList<Phase> time;
+        public ArrayList<Phase> phasedetected;
 	public String phasename;
 	/**
         * in the InitialClimb constructor we we pass the count of rows
@@ -38,13 +38,14 @@ public class InitialClimb{
 
         /**
          * here we pass the rowcount to  calculate
-         * the compare the altitude and then the check 
+         * the altitude and then the check 
 	 * condition will validate the transition
-         * to initial climb phaseis taking place
+         * to initial climb phase is taking place
 	 * and record the start time and end time
-         * of intial climb phase
+         * of initial climb phase
 	 *
          * @param rowcount is the number of rows in CSV file
+	 * @return phasedetected arraylist of initial climb phase detected through 
          */
 
 	public ArrayList<Phase> check(int rowcount) {
@@ -52,7 +53,7 @@ public class InitialClimb{
 		
                 int  j = 0;
                 
-		time = new ArrayList<Phase>();
+		phasedetected = new ArrayList<Phase>();
 		
 
 		while (j < rowcount) {
@@ -73,13 +74,13 @@ public class InitialClimb{
 			if (altitude >= 1000) {
 				this.endtime = j;
 				Phase currentphase = new Phase("InitialClimb", starttime, endtime);
-                                time.add(currentphase);
+                                phasedetected.add(currentphase);
 								
 				break;
 			}
 		        j++;	
               }
-	      return time;
+	      return phasedetected;
 
         }
 

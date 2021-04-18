@@ -57,9 +57,11 @@ __to complile code__
 __to run code__
 
 ```
- - execute ProcessFlightFile class by specifying the location of the testdate followed by example csv flight file and enter type 1 or 2 or 3 for phase type.
+ - execute ProcessFlightFile class by specifying the location of the testdate followed by example csv flight file(inside any testfile) and enter type 1 or 2 or 3 or 4for phase type.
 
- - java ProcessFlightFile ~/TestData/pa28_flight_16704.csv 2
+ - java ProcessFlightFile ~/saumya_ngafid/ngafid/Validationfiles/initialclimbAnnotations.txt 3
+ - java ProcessFlightFile ~/saumya_ngafid/ngafid/Validationfiles/Testing.txt 3
+
 
 
 ```
@@ -69,19 +71,22 @@ __to execute testcases__
 ```
  - Download validation text files from [git hub link](https://github.com/saumya161992/ngafid/tree/master/Validationfiles).
 
- - execute ProcessFlightFile class by specifying the location of the testdate followed by example csv flight file and enter type 1 or 2 or 3 for phase type.
+ - execute ProcessFlightFile class by specifying the location of the testdate followed by example manualannotations flightfile and enter type 2 or 3 for phase type.
 
  - for executing test cases for transition from standing to taxi follow the below syntax:
   
-    java FlightAnnotations ~/Validationfiles/TaxiAnnotations.txt
+    java FlightAnnotations ~/saumya_ngafid/ngafid/Validationfiles/TaxiAnnotations.txt
+
 
 - for executing test cases to detect multiple takeoffs follow the below syntax:
  
-    java TakeOffAnnotations ~/Validationfiles/Takeoff.txt
+    java ProcessFlightFile ~/saumya_ngafid/ngafid/Validationfiles/TakeoffAnnotations.txt 2
+
 
 - for executing test cases to detect transition from takeoff to initialclimb follow the below syntax:
  
-   java InitialClimbAnnotations ~/Validationfiles/initialclimbAnnotations.txt
+   java ProcessFlightFile ~/saumya_ngafid/ngafid/Validationfiles/initialclimbAnnotations.txt 3
+
 
  ```
 

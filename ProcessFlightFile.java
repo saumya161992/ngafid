@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
  * arraylist after retrieving all flight 
  * files from manual annotations text file
  */
+
 public class ProcessFlightFile {
 	public static void main(String[] arguments) {
 		//make sure that two command line argument is given and
@@ -50,7 +51,7 @@ public class ProcessFlightFile {
 				String[] aircraft = line1.split(",");
 				flightfiles.add(aircraft[0]);
 			}	
-			bufferedReader.close();
+			bufferedReadernew.close();
 
                                 
 		 } catch (IOException e) {
