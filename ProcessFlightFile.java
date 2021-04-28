@@ -139,7 +139,7 @@ public class ProcessFlightFile {
 					int numOfRows = columns.get(0).getSize();
 					System.out.println(" number of rows in CSV file are " + numOfRows);
 					// here we pass row count and columns arraylist to standing class
-					System.out.println("Enter phase type 1 for standing phase  and type 2 to identify Transition from taxi to takeoff phase and 3 for Initial Climb phase and 4 for Enroute phase ");
+					System.out.println("Enter phase type 1 for standing phase  and type 2 to identify Transition from taxi to takeoff phase "  + " \n " + "  3 for Initial Climb phase and 4 for Enroute phase ");
 					
 
 					int type = Integer.valueOf(phasetype);
@@ -171,6 +171,8 @@ public class ProcessFlightFile {
 							//Allautomatedphases.add(EN.check(numOfRows));
 
 							break;	
+						case 5 : Maneuvering MN = new Maneuvering(numOfRows,columns);
+                                                         break;	
 						default:break;
 					}	
 

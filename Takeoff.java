@@ -125,7 +125,7 @@ public  class Takeoff {
                                  Phase currentphase = new Phase("Takeoff", starttime, endtime);
                                  phasedetected.add(currentphase);
  
-                        	 System.out.println( "Phase started ----> " + starttime  + "Phase  ended at time " + endtime + " height " + height );
+                        	 //System.out.println( "Phase started ----> " + starttime  + "Phase  ended at time " + endtime + " height " + height );
 			
 		      	}
 				 

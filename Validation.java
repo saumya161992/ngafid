@@ -50,7 +50,7 @@ public class Validation {
 	 */ 
 	
    	public void Validation(ArrayList<Phase> humanPhases, ArrayList<ArrayList<Phase>> automatedPhases) {
-
+ 
    	
         	for(int a = 0; a < humanPhases.size() ; a++) {
                 	int actualstart = humanPhases.get(a).startRow;
@@ -65,7 +65,7 @@ public class Validation {
 
                         		int foundstart = automatedPhases.get(i).get(j).startRow;
                         		int foundend = automatedPhases.get(i).get(j).endRow;
-//                       		System.out.println("a is ---- " + a + "j is --- " + j + "i is --- "+ i +"actualstart is --->> " + actualstart  + " foundstart is ---->>>> "  + foundstart + " actual end is--->>  " + actualend + " found end is--->> " + foundend );
+//                       		//System.out.println("a is ---- " + a + "j is --- " + j + "i is --- "+ i +"actualstart is --->> " + actualstart  + " foundstart is ---->>>> "  + foundstart + " actual end is--->>  " + actualend + " found end is--->> " + foundend );
                         		//System.out.println(automatedPhases.get(i).get(j).phaseName +"<-------->" + actualstart  + " foundsstart---->>>> "  + foundstart + " actual end--->>  " + actualend + " found end is---- " + foundend );
 
                         		if( (((foundstart == actualstart) || (Math.abs(foundstart - actualstart) < 15))) && (((foundend == actualend) || (Math.abs(foundend - actualend) < 15))) ) {
@@ -87,10 +87,10 @@ public class Validation {
          		}
         	}	
 
-
-        	System.out.println("True positives are " + truepositives );
-        	System.out.println("False negatives are " + falsenegatives);
-       	 	System.out.println("False positives are " + falsepositives);
+                
+        	System.out.println("True positives are " + truepositives + " for phase " +  humanPhases.get(0).phaseName );
+        	System.out.println("False negatives are " + falsenegatives + " for phase " +   humanPhases.get(0).phaseName);
+       	 	System.out.println("False positives are " + falsepositives  + " for phase " +   humanPhases.get(0).phaseName);
 	
    	}
 }   
