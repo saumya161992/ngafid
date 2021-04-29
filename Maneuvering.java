@@ -49,7 +49,7 @@ public  class Maneuvering {
                 System.out.println(" row count is " + rows);
                 this.rowcount = rows;
                 this.columnsList = columns;
-                int count = ((int)this.rowcount/300)+1;
+                int count = ((int)this.rowcount/10)+1;
                
 		for ( int i = 0 ;i < columns.size() ; i++) {
                         if(columns.get(i).getName().equals("Pitch")) {
@@ -76,31 +76,112 @@ public  class Maneuvering {
          */
          public void check(int rowcount, ArrayList<FlightColumn> columns) {
 
-                
-                 int j = 0;
-               // System.out.println("inside check of maneu");
+                 double previous_slopeprevious = 0.0;
+                 double previous_slope = 0.0;
+                 double current_slope = 0.0;
+                 int i = 0;
+                 int pointer = 0;//this will maintain count of the current slope
 
-                while (j < rowcount) {
+                 int index = 0;                
+                 
+               
 
-                         height = columnsList.get(ColNames.AltAGL.getValue()).getValue(j);
+                 while (k < rowcount - 2) {
+                          
+		       if (k == 0) {
 
-                         curraltitude = height;
-                          while (curraltitude >  prevaltitude) {
+                                 LinearRegression temp = getRegressionSlope(rowcount, k , 10);
+                                 //this will store the first clculated slope
 
-                          	prevaltitude = curraltitude;
-                                timestamp = timestamp + 1;
-				index++;
-                                curraltitude = columnsList.get(ColNames.AltAGL.getValue()).getValue(timestamp) ;
-                                System.out.println("altitude is  " + curraltitude + " index is " + timestamp);
+                                 previous_slope = temp.slope;
 
-                                if (curraltitude <= 200) {
-                                	break;
 
+                        } else {
+
+                                //this will store the previous slope
+                                previous_slopeprevious = previous_slope;
+                                previous_slope = current_slope;
+                          //    previous_rsquare = current_rsquare;
+                         }
+
+                         k = k+1;
+
+                         LinearRegression temp = getRegressionSlope(rowcount, k, 10);
+                         //here the current calculated slope is stored
+
+                         current_slope = temp.slope;
+                         //current_rsquare = temp.rsquare;
+                         //double altitude = columnsList.get(ColNames.AltAGL.getValue()).getValue(k);
+                         //System.out.println("altitude is " +altitude );
+                         
+                         double altitude = columnsList.get(ColNames.AltAGL.getValue()).getValue(k);
+
+                         
+
+			
+                         
+
+                       
+			// System.out.println("current slope is " +  current_slope  + " previous slope is " + previous_slope + " time is " + k   );
+
+			
+
+                   
+
+                        
+			 if(current_slope < -8 ) {
+                               
+				current_slope = maneuveringcheck(altitude, rowcount, previous_slope, current_slope);
+ 
+                                if (current_slope > -1.0 && current_slope > 1.0 ) {
+                                    
+			           	System.out.println("--------detected turn --------");		
+				   	int turntime = k;
+
+					current_slope = maneuveringcheck(altitude, rowcount ,previous_slope, current_slope);  
+				   
+				  	      
+
+					/* while ((current_slope > previous_slope) && index < 8) {
+                                                        
+						 k++;
+						 index++;
+                                                 current_slope = maneuveringcheck(altitude, rowcount, previous_slope, current_slope);
+						 if (current_slope  > -1.0 && current_slope > 1.0) {
+							 //System.out.println("maneuvering ends" + k);
+							 break;
+					         
+						 }
+				                 //System.out.println("maneuvering ends" + k);
+		 
+
+                                         }*/
+			        while (current_slope > -1.0 && current_slope > 1.0) {
+                                	current_slope = maneuveringcheck(altitude, rowcount, previous_slope, current_slope);
                                 }
-			 }	
+                                         
+				if (k - turntime > 25) {
+					System.out.println("maneuvering ends" + k);
+                                } 
+
+
+				       	 
+						
+
+                         }
+
+                                
+
+                                
+                               
+				
+				
+	 	}	
+				
+					
                                            
                                 //System.out.println("current altitude is " + curraltitude + " at timestamp " + timestamp + " prevaltitude is " + prevaltitude);
-                                if (index > 200) {
+                                /*if (index > 200) {
 					//Pitch(19),
                                         // Roll(20),
                                        // System.out.println("inside condition");
@@ -113,15 +194,115 @@ public  class Maneuvering {
 
                                  	//System.out.println( " pitch is  " + pitch + " roll is " + roll + "timestamp is " + timestamp );
                                         
-                                }index =0;
+                                }index =0;*/
 
                         
-                        j++;
+                        //k++;
                 }
 
 
 
         }
+
+        
+       public double maneuveringcheck(double altitude,int  rowcount,  double previous_slope, double  current_slope) { 
+
+      	 	while (altitude > 200 && k < rowcount -1 && current_slope > previous_slope )  {
+
+
+                       previous_slope = current_slope;
+                       k++;
+
+                       LinearRegression temp2 = getRegressionSlope(rowcount, k, 10);
+                        //here the current calculated slope is stored
+
+                       current_slope = temp2.slope;
+
+                       altitude = columnsList.get(ColNames.AltAGL.getValue()).getValue(k);
+
+                       System.out.println("current slope is " +  current_slope  + " previous slope is " + previous_slope + " time is " + k  );
+              
+		}
+                return current_slope;
+      }		
+
+
+
+
+        public LinearRegression getRegressionSlope(int rowcount, int offset, int length) {
+
+
+                double mean_x = 0.0;// this will store mean of time
+                double mean_y = 0.0;//this will store mean of altitude
+                double totaltime = 0.0;
+                double[] altitude = new double[10];//will store all the altitude values for the defined range from start index
+                int[] time = new int[10];//this will store all the time values for the defined range from start index 
+                int p = 0;
+                double sumaltitude = 0.0;
+                Arrays.fill(altitude, 0);//this will initialize altitude array with zero
+                Arrays.fill(time, 0);//this will initilize time arry with zero
+
+                for (int j = offset; j < offset + length; j++) {
+
+                        if (j < rowcount ) {
+                                //this is used to fetch altitude in CSV at a given index
+                                altitude[p] = columnsList.get(ColNames.AltAGL.getValue()).getValue(j);
+                                //this will store all the time values against the altitude
+                                time[p] = j;
+                                sumaltitude = sumaltitude + altitude[p];
+                                totaltime = totaltime +  time[p];
+                                p++;
+                        }
+                }
+
+               //this will store average of altitude
+                mean_y = (sumaltitude/10);
+                //this will store average 1of time
+                mean_x = (totaltime/10);
+
+                double  intercept = 0.0;
+                double  numerator = 0;
+                double  denominator = 0;
+
+                for (int k = 0; k < length && offset + k < rowcount; k++) {
+
+                        numerator += (altitude[k] - mean_y) * (time[k] - mean_x);
+                        denominator += (time[k] - mean_x) * (time[k] - mean_x);
+
+                }
+                //here final slope calculation for range is happening
+                slope = numerator/denominator;
+
+                intercept  = (mean_y - (slope *  mean_x));
+                //System.out.println("slope " + count + " is " + slope);
+                count++;
+                double actual = 0.0;
+                double estimated = 0.0;
+                double y_pred = 0.0;
+                double r2 = 0.0;
+                
+
+		LinearRegression LR = new LinearRegression();
+                LR.slope = slope;
+                //LR.rsquare = r2;
+
+                //System.out.println(" r value is " + r2);
+                //here slope and rsquare values are returned to the getregression slope function
+                return LR;
+
+		 
+
+
+         }
+
+
+         class LinearRegression {
+
+                public double slope = 0.0;
+                //public double rsquare = 0.0;
+
+         }
+
 
 
                      
