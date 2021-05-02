@@ -29,10 +29,18 @@ public  class Enroute {
         private int rowcount;// this is CSV file row count
         private ArrayList<FlightColumn> columnsList; //this will be used to read Columns arraylist generated in ProcessFlightFile
         double slope = 0.0;//this will save all calculated slopes
+	double slopepitch = 0.0;
         double[] roundoffslope ;
         private ArrayList<Double> phasetransition = new ArrayList<>();
 	private ArrayList<Integer> cruiseslopes = new ArrayList(); // this will temporarily store the time  values if slope for 300 values at a time is found in range (-1 to 1) 
 	private ArrayList<Phase> phasedetected = new ArrayList(); // this stores all detected phases
+        public int pitchindex;
+	public int Rollindex;
+	public int speedindex;
+	private double currentpitch = 0.0;
+	private double currentroll = 0.0;
+
+
 
         /**
          * in the Enroute constructor we we pass the count of rows
@@ -60,6 +68,19 @@ public  class Enroute {
 
                 	height = columnsList.get(ColNames.AltAGL.getValue()).getValue(k);
 
+			for ( int i = 0 ;i < columns.size() ; i++) {
+                        	if (columns.get(i).getName().equals("Pitch")) {
+                                	pitchindex = i;
+                                	//System.out.println("1 --> " + columns.get(i).getName() + " pitch index is  "  + pitchindex );
+                        	//}         System.out.println("1 --> " + columns.get(i).getName() + " pitch index is  "  + pitchindex );
+                        	} else if (columns.get(i).getName().equals("Roll")) {
+                                	Rollindex = i;
+                                } else if (columns.get(i).getName().equals("VSpd")) {
+                                        speedindex = i;
+				}	
+
+			}	
+
                         if (height >= 1000) {
                         	
 				break;
@@ -73,7 +94,7 @@ public  class Enroute {
 
                 
 		//here we call check function to identify if there is a transition from initial climb to Enroute phase
-                check(rowcount, k);
+                check(rowcount, k, columns);
         }
 
         /**
@@ -84,14 +105,17 @@ public  class Enroute {
          *
          * @param rowcount is the number of rows in CSV file
          */
-         public ArrayList<Phase> check(int rowcount, int k) {
+         public ArrayList<Phase> check(int rowcount, int k, ArrayList<FlightColumn> columns) {
 
                  double previous_slopeprevious = 0.0;
                  double previous_slope = 0.0;
-                 double previous_rsquare = 0.0;
+		 double current_slope = 0.0;
+                 double previous_slopepitch = 0.0;
                  double current_rsquare = 0.0;
-                 double current_slope = 0.0;
+                 double current_slopepitch = 0.0;
                  int i = 0;
+		 int timenow = 0;
+		 double indexpitch = 0;
                  int pointer = 0;//this will maintain count of the current slope
 
  		 String str = "";
@@ -106,14 +130,16 @@ public  class Enroute {
                                  //this will store the first clculated slope
                                  
                                  previous_slope = temp.slope;
+				 
                
 	       	
                         } else {
 
                         	//this will store the previous slope
-                                previous_slopeprevious = previous_slope;
+                                //previous_slopeprevious = previous_slope;
                                 previous_slope = current_slope;
-                          //    previous_rsquare = current_rsquare;
+		
+                          
                          }
 
                          k = k+1;
@@ -122,32 +148,150 @@ public  class Enroute {
                          //here the current calculated slope is stored
 
                          current_slope = temp.slope;
-                         //current_rsquare = temp.rsquare;
-                         //double altitude = columnsList.get(ColNames.AltAGL.getValue()).getValue(k);
-                         //System.out.println("altitude is " +altitude );
+			 
+                         
+                         
+                         
                          int val = k;
 			 double altitude = columnsList.get(ColNames.AltAGL.getValue()).getValue(val);
+			 double previouspitch = currentpitch;
+			 currentpitch = columns.get(pitchindex).getValue(val) ;
+                         
+			 currentroll =  columns.get(Rollindex).getValue(val) ;
+
+                         double currentspeed = columns.get(speedindex).getValue(val) ;
+
 
                          pointer++;
 			 
-			 //this condition will calculate slope values within(-1 to 1) and then store them in cruiseslopes arraylist temporarily
-			 if (current_slope > -1.0 && current_slope < 1.0 && altitude >= 1000 ) {
-			
-			
-				cruiseslopes.add(val); 
-                         	//System.out.println( "current slope is  " + current_slope + " at time " + val + " at altitude " + altitude  );
 
-			 } else {
+			 //this condition will calculate slope values within(-1 to 1) and then store them in cruiseslopes arraylist temporarily
+			 if (current_slope > -1.5 && current_slope < 1.5 && altitude >= 1000 ) {
+			        
+		                 System.out.println("current vertical speed is " + currentspeed);		
+				 /*if (currentspeed < -800 || currentspeed > 800) {
+
+						 //currentroll > 12 || currentroll < -12 || currentspeed < -800 || currentspeed > 800) {
+				        if (cruiseslopes.size() > 300 ) {
+						starttime =  cruiseslopes.get(0)  ; //start time is mean of total time
+                                        	endtime = cruiseslopes.get(cruiseslopes.size() - 1)  ; // endtime is mean of total time
+                                        	System.out.println("cruise found starting at  " + starttime + " endinig at " + endtime);
+                                                Phase currentphase = new Phase("Cruise", starttime, endtime);
+                                                phasedetected.add(currentphase); //this will keep on adding all detected cruise phases for a flight file
+
+                                         
+					 	cruiseslopes.clear();
+					}
+					/*else if (cruiseslopes.size() < 300 ) {
+      	
+                                        //System.out.println( " at val " + val + " current roll is  " +  currentroll + " currentspeed is " + currentspeed); 
+						cruiseslopes.clear();
+					}*/
+
+				 //}
+				 if (previouspitch < 5.0  &&  previouspitch > -5.0) {
+                         		indexpitch = 0;
+					//cruiseslopes.add(val);
+
+				}	
+                                    
+				if (currentpitch > 5.0 || currentpitch < -5.0) {
+					
+					indexpitch++;
+
+					if (indexpitch == 1) {
+					      timenow = k;
+					}     
+					if (indexpitch > 10 && cruiseslopes.size() < 300) {
+                                        	cruiseslopes.clear();
+                                        	indexpitch = 0;
+                                        	//System.out.println("cruise looking again");
+						k = timenow + 1;
+							
+                                        }
+					/*if (indexpitch >= 10 ) {
+						if (cruiseslopes.size() > 300 ) {
+
+                                        		starttime =  cruiseslopes.get(0)  ; //start time is mean of total time
+                                                	endtime = cruiseslopes.get((cruiseslopes.size())-1)  ; // endtime is mean of total time
+                                               		// System.out.println("cruise found starting at  " + starttime + " ending at " + endtime);
+
+                                                	Phase currentphase = new Phase("Cruise", starttime, endtime);
+                                                	phasedetected.add(currentphase); //this will keep on adding all detected cruise phases for a flight file
+                                                }
+                                                cruiseslopes.clear();
+					}*/	
+				}	
+
+
+
+
+
+			        
+
+				
+
+
+				cruiseslopes.add(val); 
+                                System.out.println( "current slope is  " + current_slope + " at time " + val + " at altitude " + altitude    + " current pitch is  " +  currentpitch + " count is " + indexpitch + " size of arraylist is  " + cruiseslopes.size() );
+
+			 } else  {
+
+				int size = cruiseslopes.size();
+                                System.out.println( "current slope is  " + current_slope + " at time " + val + " at altitude " + altitude   + " till time " + (val + 300) +" current pitch is  " +  currentpitch + " count  is  " + indexpitch  );
+
+                                if (size >= 300) {
+
+                                
+				 int indexpitchendtime = 0;
+				 int count = 0;
+				 currentroll = columns.get(Rollindex).getValue(val) ;
+
+				 while (count < 300 && (val + count < (rowcount - 5 )) ) {
+                                        count++;
+
+					previouspitch  = currentpitch;
+			         	currentpitch = columns.get(pitchindex).getValue(val + count) ;
+               			        currentroll  = columns.get(Rollindex).getValue(val + count) ;
+                                        
+					if ((currentroll < - 11 ||  currentroll > 11)) {
+                                                System.out.println(" roll is " + currentroll + " so breaking here " + " at time " + (val + count) ); 
+						break;
+					}	
+
+					//System.out.println("end time is " + (val+count) + " and pitch is " + currentpitch + " at index " + count + " and roll is " + currentroll);
+					cruiseslopes.add(val+count);
+                                   
+
+					if (previouspitch < 5.0  &&  previouspitch > -5.0) {
+                                        	indexpitchendtime = 0;
+                                        	
+
+                                	}
+
+
+                                        if (currentpitch > 5.0 || currentpitch < -5.0) {
+                                        	System.out.println("index pitch is " + indexpitchendtime);
+                                        	indexpitchendtime++;
+                                                if (indexpitchendtime  > 5 || (currentroll < - 10 && currentroll > 10)) {
+							break;
+						}
+					}	
+				 }
+		         
+			 //} else {
 
 				//below condition detects if cruise phase takes place
 				//it will take place when slope values are in range (-1 to 1) for minimum 5 minutes 
 
-                         	int size = cruiseslopes.size();
-			 	if (size >= 300) {
+                         	 size = cruiseslopes.size();
+				//System.out.println( "current slope is  " + current_slope + " at time " + val + " at altitude " + altitude   + " till time " + (val + 300) +" current pitch is  " +  currentpitch + " count  is  " + indexpitch  );
+
+			 	//if (size >= 300) {
 				     
 					
-                                        starttime = 150 +  cruiseslopes.get(0)  ; //start time is mean of total time
-					endtime = 150 + cruiseslopes.get(size-1)  ; // endtime is mean of total time
+                                        starttime =  cruiseslopes.get(0)  ; //start time is mean of total time
+					endtime = cruiseslopes.get(size-1)  ; // endtime is mean of total time
 					System.out.println("cruise found starting at  " + starttime + " ending at " + endtime);
 
 					Phase currentphase = new Phase("Cruise", starttime, endtime);
@@ -219,11 +363,15 @@ public  class Enroute {
 
 		double mean_x = 0.0;// this will store mean of time
                 double mean_y = 0.0;//this will store mean of altitude
+		
+		
                 double totaltime = 0.0;
                 double[] altitude = new double[300];//will store all the altitude values for the defined range from start index
                 int[] time = new int[300];//this will store all the time values for the defined range from start index 
-                int p = 0;
+                
+		int p = 0;
                 double sumaltitude = 0.0;
+		
                 Arrays.fill(altitude, 0);//this will initialize altitude array with zero
                 Arrays.fill(time, 0);//this will initilize time arry with zero
 
@@ -232,9 +380,12 @@ public  class Enroute {
                 	if (j < rowcount) {
                                 //this is used to fetch altitude in CSV at a given index
                         	altitude[p] = columnsList.get(ColNames.AltAGL.getValue()).getValue(j);
+				
+
                                 //this will store all the time values against the altitude
                                 time[p] = j;
                                 sumaltitude = sumaltitude + altitude[p];
+				
                                 totaltime = totaltime +  time[p];
                                 p++;
                         }
@@ -245,18 +396,25 @@ public  class Enroute {
                 //this will store average of time
                 mean_x = (totaltime/300);
 
+		
+
+	
+
                 double  intercept = 0.0;
                 double  numerator = 0;
+		
                 double  denominator = 0;
 
                 for (int k = 0; k < length && offset + k < rowcount; k++) {
 
 			numerator += (altitude[k] - mean_y) * (time[k] - mean_x);
+			
                         denominator += (time[k] - mean_x) * (time[k] - mean_x);
 
                 }
                 //here final slope calculation for range is happening
                 slope = numerator/denominator;
+                
 
                 intercept  = (mean_y - (slope *  mean_x));
                 //System.out.println("slope " + count + " is " + slope);
@@ -276,7 +434,6 @@ public  class Enroute {
  	       LinearRegression LR = new LinearRegression();
                LR.slope = slope;
                //LR.rsquare = r2;
-
                //System.out.println(" r value is " + r2);
                //here slope and rsquare values are returned to the getregression slope function 
                return LR;
@@ -288,6 +445,7 @@ public  class Enroute {
          class LinearRegression {
 
                 public double slope = 0.0;
+		
                 //public double rsquare = 0.0;
 
          }

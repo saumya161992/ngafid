@@ -122,7 +122,7 @@ public  class Maneuvering {
                          
 
                        
-			// System.out.println("current slope is " +  current_slope  + " previous slope is " + previous_slope + " time is " + k   );
+			 System.out.println("current slope is " +  current_slope  + " previous slope is " + previous_slope + " time is " + k   );
 
 			
 
@@ -131,8 +131,12 @@ public  class Maneuvering {
                         
 			 if(current_slope < -8 ) {
                                
+
+				System.out.println( " here k " + k); 
 				current_slope = maneuveringcheck(altitude, rowcount, previous_slope, current_slope);
  
+				 System.out.println( " here k " + k);
+
                                 if (current_slope > -1.0 && current_slope > 1.0 ) {
                                     
 			           	System.out.println("--------detected turn --------");		
@@ -154,10 +158,19 @@ public  class Maneuvering {
 						 }
 				                 //System.out.println("maneuvering ends" + k);
 		 
-
+                                                
                                          }*/
+                              
+			      //   System.out.println( " here k " + k);
+		
 			        while (current_slope > -1.0 && current_slope > 1.0) {
+
+					 System.out.println( " here k " + k);
+
                                 	current_slope = maneuveringcheck(altitude, rowcount, previous_slope, current_slope);
+
+					 System.out.println( " here k " + k);
+
                                 }
                                          
 				if (k - turntime > 25) {
@@ -220,7 +233,7 @@ public  class Maneuvering {
 
                        altitude = columnsList.get(ColNames.AltAGL.getValue()).getValue(k);
 
-                       System.out.println("current slope is " +  current_slope  + " previous slope is " + previous_slope + " time is " + k  );
+                       //System.out.println("current slope is " +  current_slope  + " previous slope is " + previous_slope + " time is " + k  );
               
 		}
                 return current_slope;
