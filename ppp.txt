@@ -1,9 +1,0 @@
- number of rows in CSV file are 5566
-Enter phase type 1 for standing phase  and type 2 to identify Transition from taxi to takeoff phase  
-   3 for Initial Climb phase and 4 for Enroute phase 
- row count is 5566
- roll is -11.79 so breaking here  at time 2474
-cruise found starting at  1886 ending at 2473
-end time is  2473
-timestamp for descend to end is 2603
-cruise found starting at  4427 ending at 4741

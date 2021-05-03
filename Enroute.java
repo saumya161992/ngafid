@@ -39,6 +39,8 @@ public  class Enroute {
 	public int speedindex;
 	private double currentpitch = 0.0;
 	private double currentroll = 0.0;
+	private int indexspeed = 0;
+	public int countlist = 0;
 
 
 
@@ -114,6 +116,7 @@ public  class Enroute {
                  double current_rsquare = 0.0;
                  double current_slopepitch = 0.0;
                  int i = 0;
+	         int flag = -1;	
 		 int timenow = 0;
 		 double indexpitch = 0;
                  int pointer = 0;//this will maintain count of the current slope
@@ -156,44 +159,21 @@ public  class Enroute {
 			 double altitude = columnsList.get(ColNames.AltAGL.getValue()).getValue(val);
 			 double previouspitch = currentpitch;
 			 currentpitch = columns.get(pitchindex).getValue(val) ;
-                         
-			 currentroll =  columns.get(Rollindex).getValue(val) ;
-
-                         double currentspeed = columns.get(speedindex).getValue(val) ;
-
-
                          pointer++;
 			 
 
 			 //this condition will calculate slope values within(-1 to 1) and then store them in cruiseslopes arraylist temporarily
-			 if (current_slope > -1.5 && current_slope < 1.5 && altitude >= 1000 ) {
+			 if (current_slope > -3.0 && current_slope < 3.0 && altitude >= 500 ) {
 			        
-		                 System.out.println("current vertical speed is " + currentspeed);		
-				 /*if (currentspeed < -800 || currentspeed > 800) {
-
-						 //currentroll > 12 || currentroll < -12 || currentspeed < -800 || currentspeed > 800) {
-				        if (cruiseslopes.size() > 300 ) {
-						starttime =  cruiseslopes.get(0)  ; //start time is mean of total time
-                                        	endtime = cruiseslopes.get(cruiseslopes.size() - 1)  ; // endtime is mean of total time
-                                        	System.out.println("cruise found starting at  " + starttime + " endinig at " + endtime);
-                                                Phase currentphase = new Phase("Cruise", starttime, endtime);
-                                                phasedetected.add(currentphase); //this will keep on adding all detected cruise phases for a flight file
-
-                                         
-					 	cruiseslopes.clear();
-					}
-					/*else if (cruiseslopes.size() < 300 ) {
-      	
-                                        //System.out.println( " at val " + val + " current roll is  " +  currentroll + " currentspeed is " + currentspeed); 
-						cruiseslopes.clear();
-					}*/
-
-				 //}
-				 if (previouspitch < 5.0  &&  previouspitch > -5.0) {
+		                 		
+				if (previouspitch < 5.0  &&  previouspitch > -5.0) {
                          		indexpitch = 0;
 					//cruiseslopes.add(val);
 
 				}	
+
+				
+
                                     
 				if (currentpitch > 5.0 || currentpitch < -5.0) {
 					
@@ -231,9 +211,41 @@ public  class Enroute {
 
 				
 
+                                //System.out.println("count list is ------>" + countlist);
+				cruiseslopes.add(val);
+				if (flag == 1) {countlist = 0;}
+			        if (cruiseslopes.size()  > countlist) {	
+					//System.out.println( "inside here " );
+					double altitudeone = columnsList.get(ColNames.AltAGL.getValue()).getValue(cruiseslopes.get(countlist));
 
-				cruiseslopes.add(val); 
-                                System.out.println( "current slope is  " + current_slope + " at time " + val + " at altitude " + altitude    + " current pitch is  " +  currentpitch + " count is " + indexpitch + " size of arraylist is  " + cruiseslopes.size() );
+					if (cruiseslopes.size() > (countlist + 30)) {
+						double altitudetwo = columnsList.get(ColNames.AltAGL.getValue()).getValue(cruiseslopes.get(countlist + 30));
+						System.out.println(" difference is " + Math.abs(altitudeone - altitudetwo)  + " at val " + val + " altitudeone is " + altitudeone + " altitude 2 is " + altitudetwo + " countlist is "+ countlist);
+                                        	if (Math.abs(altitudeone - altitudetwo) > 200) {
+							System.out.println("altitude difference is greater than 100 so,  clearing the slopes arralylist to relinitialize at " +  countlist);
+							if (cruiseslopes.size() >= 300) {
+								starttime = cruiseslopes.get(0);
+								endtime = cruiseslopes.get(countlist);
+								System.out.println("phase start time " + starttime + " endtime is " + endtime);
+								cruiseslopes.clear();
+								countlist = 0;
+								flag = 1;
+							} else {
+
+								k = cruiseslopes.get(countlist + 30);
+
+								val = k;
+								//countlist++;
+								cruiseslopes.clear();
+								 flag = 1;
+								countlist = 0;
+							}	
+						}
+						countlist++;
+
+					}		
+			       }
+                               System.out.println( "current slope is  " + current_slope + " at time " + val + " at altitude " + altitude    + " current pitch is  " +  currentpitch + " count is " + indexpitch + " size of arraylist is  " + cruiseslopes.size() );
 
 			 } else  {
 
@@ -243,21 +255,17 @@ public  class Enroute {
                                 if (size >= 300) {
 
                                 
-				 int indexpitchendtime = 0;
+				 /*int indexpitchendtime = 0;
 				 int count = 0;
 				 currentroll = columns.get(Rollindex).getValue(val) ;
 
-				 while (count < 300 && (val + count < (rowcount - 5 )) ) {
+				 /*while (count < 300 && (val + count < (rowcount - 5 )) ) {
                                         count++;
 
 					previouspitch  = currentpitch;
 			         	currentpitch = columns.get(pitchindex).getValue(val + count) ;
                			        currentroll  = columns.get(Rollindex).getValue(val + count) ;
-                                        
-					if ((currentroll < - 11 ||  currentroll > 11)) {
-                                                System.out.println(" roll is " + currentroll + " so breaking here " + " at time " + (val + count) ); 
-						break;
-					}	
+                                        	
 
 					//System.out.println("end time is " + (val+count) + " and pitch is " + currentpitch + " at index " + count + " and roll is " + currentroll);
 					cruiseslopes.add(val+count);
@@ -277,7 +285,7 @@ public  class Enroute {
 							break;
 						}
 					}	
-				 }
+				 }*/
 		         
 			 //} else {
 
@@ -292,7 +300,7 @@ public  class Enroute {
 					
                                         starttime =  cruiseslopes.get(0)  ; //start time is mean of total time
 					endtime = cruiseslopes.get(size-1)  ; // endtime is mean of total time
-					System.out.println("cruise found starting at  " + starttime + " ending at " + endtime);
+					///System.out.println("cruise found starting at  " + starttime + " ending at " + endtime);
 
 					Phase currentphase = new Phase("Cruise", starttime, endtime);
                                         phasedetected.add(currentphase); //this will keep on adding all detected cruise phases for a flight file
@@ -327,6 +335,7 @@ public  class Enroute {
 						//System.out.println("current altitude is " + curraltitude + " at timestamp " + timestamp + " prevaltitude is " + prevaltitude);
 						if (index > 200) {
 							System.out.println( " flight not yet descending " );
+							countlist = 0;
 							break;
 					        }		
 
@@ -424,17 +433,9 @@ public  class Enroute {
                 double y_pred = 0.0;
                 double r2 = 0.0;
                 
-                /*for (int i = 0; i < length && offset+i < rowcount; i++) {
-                y_pred = intercept + slope * time[i];
-                actual = actual + (altitude[i] - mean_y) * (altitude[i] - mean_y);
-                estimated = estimated + (y_pred - mean_y) * (y_pred - mean_y);
-               }
-
-               r2 = (estimated/actual);*/
  	       LinearRegression LR = new LinearRegression();
                LR.slope = slope;
-               //LR.rsquare = r2;
-               //System.out.println(" r value is " + r2);
+               
                //here slope and rsquare values are returned to the getregression slope function 
                return LR;
 
@@ -446,7 +447,7 @@ public  class Enroute {
 
                 public double slope = 0.0;
 		
-                //public double rsquare = 0.0;
+                
 
          }
 }
