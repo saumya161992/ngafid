@@ -163,10 +163,10 @@ public  class Enroute {
 			 
 
 			 //this condition will calculate slope values within(-1 to 1) and then store them in cruiseslopes arraylist temporarily
-			 if (current_slope > -3.0 && current_slope < 3.0 && altitude >= 500 ) {
+			 if (current_slope > -2.0 && current_slope < 2.0 && altitude >= 500 ) {
 			        
 		                 		
-				if (previouspitch < 5.0  &&  previouspitch > -5.0) {
+				/*if (previouspitch < 5.0  &&  previouspitch > -5.0) {
                          		indexpitch = 0;
 					//cruiseslopes.add(val);
 
@@ -201,7 +201,7 @@ public  class Enroute {
                                                 }
                                                 cruiseslopes.clear();
 					}*/	
-				}	
+				//}	
 
 
 
@@ -216,21 +216,35 @@ public  class Enroute {
 				if (flag == 1) {countlist = 0;}
 			        if (cruiseslopes.size()  > countlist) {	
 					//System.out.println( "inside here " );
+					double alt =  columnsList.get(ColNames.AltAGL.getValue()).getValue(cruiseslopes.get(0));
+
 					double altitudeone = columnsList.get(ColNames.AltAGL.getValue()).getValue(cruiseslopes.get(countlist));
+					
 
 					if (cruiseslopes.size() > (countlist + 30)) {
 						double altitudetwo = columnsList.get(ColNames.AltAGL.getValue()).getValue(cruiseslopes.get(countlist + 30));
-						System.out.println(" difference is " + Math.abs(altitudeone - altitudetwo)  + " at val " + val + " altitudeone is " + altitudeone + " altitude 2 is " + altitudetwo + " countlist is "+ countlist);
-                                        	if (Math.abs(altitudeone - altitudetwo) > 200) {
-							System.out.println("altitude difference is greater than 100 so,  clearing the slopes arralylist to relinitialize at " +  countlist);
+						
+
+
+
+						//System.out.println(" difference is " + Math.abs(altitudeone - altitudetwo)  + " at val " + val + " altitudeone is " + altitudeone + " altitude 2 is " + altitudetwo + " countlist is "+ countlist);
+                                        	if ((Math.abs(altitudeone - altitudetwo) > 200) )  {
+							int number =0;
+							//System.out.println("altitude difference is greater than 100 so,  clearing the slopes arralylist to relinitialize at " +  countlist);
 							if (cruiseslopes.size() >= 300) {
 								starttime = cruiseslopes.get(0);
+								while (cruiseslopes.size() > 0) {
+									double K = columnsList.get(ColNames.AltAGL.getValue()).getValue(cruiseslopes.get(number++)); 
+								       if (Math.abs(alt - K) > 400) {
+								             	       System.out.println(" fire alarm " + cruiseslopes.get(number++));
+								       }
+							        }	       
 								endtime = cruiseslopes.get(countlist);
 								System.out.println("phase start time " + starttime + " endtime is " + endtime);
 								cruiseslopes.clear();
 								countlist = 0;
 								flag = 1;
-							} else {
+							} else if (cruiseslopes.size() > 0) {
 
 								k = cruiseslopes.get(countlist + 30);
 
@@ -245,14 +259,14 @@ public  class Enroute {
 
 					}		
 			       }
-                               System.out.println( "current slope is  " + current_slope + " at time " + val + " at altitude " + altitude    + " current pitch is  " +  currentpitch + " count is " + indexpitch + " size of arraylist is  " + cruiseslopes.size() );
+                               //System.out.println( "current slope is  " + current_slope + " at time " + val + " at altitude " + altitude    + " current pitch is  " +  currentpitch + " count is " + indexpitch + " size of arraylist is  " + cruiseslopes.size() );
 
 			 } else  {
 
 				int size = cruiseslopes.size();
-                                System.out.println( "current slope is  " + current_slope + " at time " + val + " at altitude " + altitude   + " till time " + (val + 300) +" current pitch is  " +  currentpitch + " count  is  " + indexpitch  );
+                                //System.out.println( "current slope is  " + current_slope + " at time " + val + " at altitude " + altitude   + " till time " + (val + 300) +" current pitch is  " +  currentpitch + " count  is  " + indexpitch  );
 
-                                if (size >= 300) {
+                                //if (size >= 300) {
 
                                 
 				 /*int indexpitchendtime = 0;
@@ -295,12 +309,22 @@ public  class Enroute {
                          	 size = cruiseslopes.size();
 				//System.out.println( "current slope is  " + current_slope + " at time " + val + " at altitude " + altitude   + " till time " + (val + 300) +" current pitch is  " +  currentpitch + " count  is  " + indexpitch  );
 
-			 	//if (size >= 300) {
+				int number = 0; 
+			 	if (size >= 300) {
 				     
-					
+					double alt =  columnsList.get(ColNames.AltAGL.getValue()).getValue(cruiseslopes.get(0));
+
+					while (cruiseslopes.size() - number > 0  ) {
+                                        	double K = columnsList.get(ColNames.AltAGL.getValue()).getValue(cruiseslopes.get(number));
+                                                if (Math.abs(alt - K)  > 200) {
+                                                	//System.out.println(" fire alarm " + cruiseslopes.get(number));
+                                                }
+						number++;
+                                        }
+
                                         starttime =  cruiseslopes.get(0)  ; //start time is mean of total time
 					endtime = cruiseslopes.get(size-1)  ; // endtime is mean of total time
-					///System.out.println("cruise found starting at  " + starttime + " ending at " + endtime);
+					System.out.println("cruise found starting at  " + starttime + " ending at " + endtime);
 
 					Phase currentphase = new Phase("Cruise", starttime, endtime);
                                         phasedetected.add(currentphase); //this will keep on adding all detected cruise phases for a flight file
