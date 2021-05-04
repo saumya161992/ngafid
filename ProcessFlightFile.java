@@ -139,13 +139,13 @@ public class ProcessFlightFile {
 					int numOfRows = columns.get(0).getSize();
 					System.out.println(" number of rows in CSV file are " + numOfRows);
 					// here we pass row count and columns arraylist to standing class
-					System.out.println("Enter phase type 1 for standing phase  and type 2 to identify Transition from taxi to takeoff phase "  + " \n " + "  3 for Initial Climb phase and 4 for Enroute phase ");
+					System.out.println("Enter phase type 1 for standing phase  and type 2 to identify Transition from taxi to takeoff phase "  + " \n " + "3 for Initial Climb phase and 4 for Enroute phase ");
 					
 
 					int type = Integer.valueOf(phasetype);
 					switch(type) {
 						case 1:	Standing ST = new Standing(numOfRows, columns);
-							System.out.println(ST);
+							
 							break;
 						case 2:	Takeoff TT = new Takeoff(numOfRows, columns);
 							//automatedphases = TT.check(numOfRows);
@@ -167,8 +167,25 @@ public class ProcessFlightFile {
 							Validation vc = new Validation(numOfRows,  Allautomatedphases, humanPhases);
 							break;	
 						case 4: Enroute EN = new Enroute(numOfRows,columns);
-							
-							//Allautomatedphases.add(EN.check(numOfRows));
+							int k = 0;
+							while (k < numOfRows) {
+
+                        					double height = columns.get(ColNames.AltAGL.getValue()).getValue(k);
+
+                        					if (height >= 1000) {
+
+                                					break;
+                        					}
+
+                        					k++;
+
+							}
+							Allautomatedphases.add(EN.check(numOfRows, k , columns));
+							Humanannotations HCE  = new Humanannotations(manualannotationtext, "Cruise");
+                                                        humanPhases = HCE.getAnnotationsFor(manualannotationtext);
+                                                        Validation vcE = new Validation(numOfRows,  Allautomatedphases, humanPhases);
+
+							//System.out.println(Allautomatedphases.size());
 
 							break;	
 						case 5 : Maneuvering MN = new Maneuvering(numOfRows,columns);

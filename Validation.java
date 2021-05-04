@@ -87,10 +87,14 @@ public class Validation {
          		}
         	}	
 
-                
+                System.out.println("\n");               
         	System.out.println("True positives are " + truepositives + " for phase " +  humanPhases.get(0).phaseName );
+		System.out.println("\n");   
         	System.out.println("False negatives are " + falsenegatives + " for phase " +   humanPhases.get(0).phaseName);
+		System.out.println("\n");   
        	 	System.out.println("False positives are " + falsepositives  + " for phase " +   humanPhases.get(0).phaseName);
+		System.out.println("\n");
+
 	
    	}
 }   

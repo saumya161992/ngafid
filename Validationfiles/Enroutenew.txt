@@ -22,5 +22,3 @@
 /home/saumya/saumya_ngafid/ngafid/TestData/flight_0.csv,2338,2960
 /home/saumya/saumya_ngafid/ngafid/TestData/pa28_flight_16695.csv,1218,2236
 /home/saumya/saumya_ngafid/ngafid/TestData/pa28_flight_16695.csv,2670,3083
-
-

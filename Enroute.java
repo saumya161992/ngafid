@@ -241,6 +241,9 @@ public  class Enroute {
 							        }	       
 								endtime = cruiseslopes.get(countlist);
 								System.out.println("phase start time " + starttime + " endtime is " + endtime);
+								 Phase currentphase = new Phase("Cruise", starttime, endtime);
+                                                                 phasedetected.add(currentphase); //this will keep on adding all detected cruise phases for a flight file
+
 								cruiseslopes.clear();
 								countlist = 0;
 								flag = 1;

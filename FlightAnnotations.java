@@ -91,9 +91,13 @@ public class FlightAnnotations {
 		    	
 		
 		}
+		System.out.println("\n");
 	    	System.out.println("True positives for transition from standing to taxi phase are " + truepositives);
+		System.out.println("\n");
 		System.out.println("False negatives for transition from standing to taxi phase are " + falsenegatives);
+		System.out.println("\n");
 		System.out.println("False positives for transition from standing to taxi phase are " + falsepositives);
+		System.out.println("\n");
         } catch (IOException e) {
           	System.err.println("ERROR reading flight file: '" + flightFilename + "'");
             	e.printStackTrace();

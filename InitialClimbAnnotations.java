@@ -80,6 +80,7 @@ public class InitialClimbAnnotations {
 
 
                 }
+                System.out.println("                               ");
                 System.out.println("True positives are " + truepositives );
 		System.out.println("False negatives are " + falsenegatives);
 		System.out.println("False positives are " + falsepositives);
