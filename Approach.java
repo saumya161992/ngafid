@@ -21,6 +21,8 @@ public  class Approach {
 	private double curraltitude = 0.0;
 	private int starttime = 0;
 	private int endtime = 0;
+	private int finalstarttime = 0;
+	private int finalendtime = 0;
         private int timestamp = 0;
         private int index = 0;
         private int k = 0;
@@ -73,7 +75,7 @@ public  class Approach {
 
         
 
-	public void check(int rowcount, int k, ArrayList<FlightColumn> columns) {
+	public ArrayList<Phase> check(int rowcount, int k, ArrayList<FlightColumn> columns) {
 
                 
  
@@ -98,10 +100,10 @@ public  class Approach {
 					starttime = k;
 				}
 
-				System.out.println("starttime is ----->>>>>  " + starttime);
+				//System.out.println("starttime is ----->>>>>  " + starttime);
 			        //count++;	
 				prevaltitude = curraltitude;
-                        	//timestamp = timestamp + 1;
+                        	
 				k++;
                         	curraltitude = columnsList.get(ColNames.AltAGL.getValue()).getValue(k) ;
 
@@ -134,17 +136,17 @@ public  class Approach {
                                 	break;
                         	}
 
-				if((curraltitude <= 200) && (curraltitude >= 195) && (flag == 0) ) {
+				if((curraltitude <= 210) && (curraltitude >= 185)  ) {
 				        	
 					endtime = k;
+					//System.out.println("added now");
                                          
-					System.out.println("starttime " + starttime + " endtime " + endtime);
+					//System.out.println("starttime " + starttime + " endtime " + endtime);
 					//flag = 1;
 					Phase currentphase = new Phase("Initial Approach", starttime, endtime);
 					phasedetected.clear();
                                         phasedetected.add(currentphase); //this will keep on adding all detected cruise phases for a flight file
                                         //System.out.println(phasedetected.get(0).startRow + " phase " + phasedetected.get(0).endRow);
-
 					break;
 				}	
 
@@ -163,6 +165,36 @@ public  class Approach {
 	        }		
 
 	        System.out.println(phasedetected.get(0).startRow + " phase " + phasedetected.get(0).endRow);	
+                System.out.println("what is k " + k + " what is rowcount " + rowcount);
+
+		
+		finalstarttime = phasedetected.get(0).endRow;
+		System.out.println("what is final start time " + finalstarttime);
+		timestamp = finalstarttime;
+
+		while(finalstarttime < rowcount - 5) {
+
+			prevaltitude = curraltitude;
+			//timestamp = finalstarttime;
+                	
+                        timestamp++;
+			curraltitude = columnsList.get(ColNames.AltAGL.getValue()).getValue(timestamp) ;
+
+                                               
+                        if((curraltitude > 40) && (curraltitude < 60)) {
+                                                        
+                        	finalendtime = timestamp;
+				Phase currentphase = new Phase("Final Approach", finalstarttime,  finalendtime);
+                                        
+                                phasedetected.add(currentphase);
+                                System.out.println("final Approach " + finalendtime);
+                                break;
+                       }
+		}       
+
+		System.out.println(phasedetected.get(1).startRow + " phase " + phasedetected.get(1).endRow);
+		return phasedetected;
+
         }
 
 

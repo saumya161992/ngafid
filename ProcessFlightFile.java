@@ -191,6 +191,26 @@ public class ProcessFlightFile {
 						case 5 : Maneuveringnew MN = new Maneuveringnew(numOfRows,columns);
                                                          break;	
 					        case 6 : Approach AA = new Approach(numOfRows,columns);
+							 int m = 0;
+                                                         while (m < numOfRows) {
+
+                                                         	double height = columns.get(ColNames.AltAGL.getValue()).getValue(m);
+
+                                                                if (height >= 1000) {
+
+                                                                	break;
+                                                                }
+
+                                                                m++;
+
+                                                         }
+
+							 Allautomatedphases.add(AA.check(numOfRows, m , columns));
+                                                         Humanannotations HCA  = new Humanannotations(manualannotationtext, "Approach");
+                                                         humanPhases = HCA.getAnnotationsFor(manualannotationtext);
+                                                         Validation vcA = new Validation(numOfRows,  Allautomatedphases, humanPhases);
+
+
                                                          break;
 		 
 						default:break;
