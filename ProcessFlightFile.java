@@ -188,8 +188,11 @@ public class ProcessFlightFile {
 							//System.out.println(Allautomatedphases.size());
 
 							break;	
-						case 5 : Maneuvering MN = new Maneuvering(numOfRows,columns);
+						case 5 : Maneuveringnew MN = new Maneuveringnew(numOfRows,columns);
                                                          break;	
+					        case 6 : Approach AA = new Approach(numOfRows,columns);
+                                                         break;
+		 
 						default:break;
 					}	
 
