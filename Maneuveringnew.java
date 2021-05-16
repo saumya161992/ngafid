@@ -9,7 +9,7 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 /**
- * this class will identify cruise and descend phase
+ * this class will identify maneuvering phase
  * and store phase name and start and end time of the 
  * phase
  */
@@ -32,7 +32,7 @@ public  class Maneuveringnew {
         double slopepitch = 0.0;
         double[] roundoffslope ;
         private ArrayList<Double> phasetransition = new ArrayList<>();
-        private ArrayList<Integer> cruiseslopes = new ArrayList(); // this will temporarily store the time  values if slope for 300 values at a time is found in range (-1 to 1) 
+        private ArrayList<Integer> cruiseslopes = new ArrayList(); 
         private ArrayList<Phase> phasedetected = new ArrayList(); // this stores all detected phases
         public int pitchindex;
         public int Rollindex;
@@ -45,10 +45,10 @@ public  class Maneuveringnew {
 
 
         /**
-         * in the Enroute constructor we we pass the count of rows
+         * in the Maneuvering constructor we we pass the count of rows
          * in a CSV file for execution at that time and the arraylist 
          * which has all the values of csv file and post this check function 
-         * is call to identify cruise and descend  phase
+         * is call to identify maneuvering  phase
          *
          * @param rows is the count of rows in CSV file
          * @param columns is the arraylist to that holds all values of CVS
@@ -61,16 +61,14 @@ public  class Maneuveringnew {
                 double[] roundoffslope = new double[rows];
 
                 /**
-                 * while loop will look for time at which initial climb ends 
-                 * and then we pass the time value to the check function so 
-                 * that slope is calculated from that time onwards
+                 * for loop is being used to get index of pitch 
+		 * and roll in columns arraylist
                  */
 
                 for ( int i = 0 ;i < columns.size() ; i++) {
                 	if (columns.get(i).getName().equals("Pitch")) {
                         	pitchindex = i;
-                                //System.out.println("1 --> " + columns.get(i).getName() + " pitch index is  "  + pitchindex );
-                                //}System.out.println("1 --> " + columns.get(i).getName() + " pitch index is  "  + pitchindex );
+                                
                         } else if (columns.get(i).getName().equals("Roll")) {
                         	Rollindex = i;
                         } else if (columns.get(i).getName().equals("VSpd")) {
@@ -84,10 +82,9 @@ public  class Maneuveringnew {
         }
 
         /**
-         * here we call get regression slope function to calculate
-         * the slopes and then compare the previous slope to the new 
-         * slope and then the check condition will validate the transition
-         * to cruise and descend  phase
+         * here we compare the roll value to be not greater than 25
+         * when the difference between timestamp is 50 seconds 
+         * to detect maneuvering phase
          *
          * @param rowcount is the number of rows in CSV file
          */
