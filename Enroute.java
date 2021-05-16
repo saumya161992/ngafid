@@ -165,54 +165,7 @@ public  class Enroute {
 			 //this condition will calculate slope values within(-1 to 1) and then store them in cruiseslopes arraylist temporarily
 			 if (current_slope > -2.0 && current_slope < 2.0 && altitude >= 500 ) {
 			        
-		                 		
-				/*if (previouspitch < 5.0  &&  previouspitch > -5.0) {
-                         		indexpitch = 0;
-					//cruiseslopes.add(val);
-
-				}	
-
-				
-
-                                    
-				if (currentpitch > 5.0 || currentpitch < -5.0) {
-					
-					indexpitch++;
-
-					if (indexpitch == 1) {
-					      timenow = k;
-					}     
-					if (indexpitch > 10 && cruiseslopes.size() < 300) {
-                                        	cruiseslopes.clear();
-                                        	indexpitch = 0;
-                                        	//System.out.println("cruise looking again");
-						k = timenow + 1;
-							
-                                        }
-					/*if (indexpitch >= 10 ) {
-						if (cruiseslopes.size() > 300 ) {
-
-                                        		starttime =  cruiseslopes.get(0)  ; //start time is mean of total time
-                                                	endtime = cruiseslopes.get((cruiseslopes.size())-1)  ; // endtime is mean of total time
-                                               		// System.out.println("cruise found starting at  " + starttime + " ending at " + endtime);
-
-                                                	Phase currentphase = new Phase("Cruise", starttime, endtime);
-                                                	phasedetected.add(currentphase); //this will keep on adding all detected cruise phases for a flight file
-                                                }
-                                                cruiseslopes.clear();
-					}*/	
-				//}	
-
-
-
-
-
-			        
-
-				
-
-                                //System.out.println("count list is ------>" + countlist);
-				cruiseslopes.add(val);
+		         	cruiseslopes.add(val);
 				if (flag == 1) {countlist = 0;}
 			        if (cruiseslopes.size()  > countlist) {	
 					//System.out.println( "inside here " );
@@ -268,43 +221,6 @@ public  class Enroute {
 
 				int size = cruiseslopes.size();
                                 //System.out.println( "current slope is  " + current_slope + " at time " + val + " at altitude " + altitude   + " till time " + (val + 300) +" current pitch is  " +  currentpitch + " count  is  " + indexpitch  );
-
-                                //if (size >= 300) {
-
-                                
-				 /*int indexpitchendtime = 0;
-				 int count = 0;
-				 currentroll = columns.get(Rollindex).getValue(val) ;
-
-				 /*while (count < 300 && (val + count < (rowcount - 5 )) ) {
-                                        count++;
-
-					previouspitch  = currentpitch;
-			         	currentpitch = columns.get(pitchindex).getValue(val + count) ;
-               			        currentroll  = columns.get(Rollindex).getValue(val + count) ;
-                                        	
-
-					//System.out.println("end time is " + (val+count) + " and pitch is " + currentpitch + " at index " + count + " and roll is " + currentroll);
-					cruiseslopes.add(val+count);
-                                   
-
-					if (previouspitch < 5.0  &&  previouspitch > -5.0) {
-                                        	indexpitchendtime = 0;
-                                        	
-
-                                	}
-
-
-                                        if (currentpitch > 5.0 || currentpitch < -5.0) {
-                                        	System.out.println("index pitch is " + indexpitchendtime);
-                                        	indexpitchendtime++;
-                                                if (indexpitchendtime  > 5 || (currentroll < - 10 && currentroll > 10)) {
-							break;
-						}
-					}	
-				 }*/
-		         
-			 //} else {
 
 				//below condition detects if cruise phase takes place
 				//it will take place when slope values are in range (-1 to 1) for minimum 5 minutes 

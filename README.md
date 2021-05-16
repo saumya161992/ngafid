@@ -75,19 +75,30 @@ __to execute testcases__
 
  - for executing test cases for transition from standing to taxi follow the below syntax:
   
-    java FlightAnnotations ~/saumya_ngafid/ngafid/Validationfiles/TaxiAnnotations.txt
+   java FlightAnnotations ~/saumya_ngafid/ngafid/Validationfiles/TaxiAnnotations.txt
 
 
 - for executing test cases to detect multiple takeoffs follow the below syntax:
  
-    java ProcessFlightFile ~/saumya_ngafid/ngafid/Validationfiles/TakeoffAnnotations.txt 2
+  java ProcessFlightFile ~/saumya_ngafid/ngafid/Validationfiles/TakeoffAnnotations.txt 2
 
 
 - for executing test cases to detect transition from takeoff to initialclimb follow the below syntax:
  
-   java ProcessFlightFile ~/saumya_ngafid/ngafid/Validationfiles/initialclimbAnnotations.txt 3
+  java ProcessFlightFile ~/saumya_ngafid/ngafid/Validationfiles/initialclimbAnnotations.txt 3
 
-- java ProcessFlightFile ~/saumya_ngafid/ngafid/Validationfiles/Enroutenew.txt 4
+-  for executing test cases to detect transition to Enroute follow the below syntax:
+   
+   java ProcessFlightFile ~/saumya_ngafid/ngafid/Validationfiles/Enroutenew.txt 4
+
+
+- for executing test cases to detect transition to Approach phase follow the below syntax:
+ 
+  java ProcessFlightFile ~/saumya_ngafid/ngafid/Validationfiles/Approach1.txt 6
+
+- for executing test cases to detect transition to Landing phase follow the below syntax:
+  
+  java ProcessFlightFile ~/saumya_ngafid/ngafid/Validationfiles/Landingnew.txt 7
 
 
 

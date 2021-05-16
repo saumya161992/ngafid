@@ -206,12 +206,47 @@ public class ProcessFlightFile {
                                                          }
 
 							 Allautomatedphases.add(AA.check(numOfRows, m , columns));
-                                                         Humanannotations HCA  = new Humanannotations(manualannotationtext, "Approach");
+                                                         Humanannotations HCL  = new Humanannotations(manualannotationtext, "Approach");
+                                                         humanPhases = HCL.getAnnotationsFor(manualannotationtext);
+                                                         Validation vcL = new Validation(numOfRows,  Allautomatedphases, humanPhases);
+
+
+                                                         break;
+						case 7 : Landing LN = new Landing(numOfRows, columns);
+                                                         
+
+							 int n = 0;
+                                                         while (n < numOfRows) {
+
+                                                                double height = columns.get(ColNames.AltAGL.getValue()).getValue(n);
+
+                                                                if (height >= 1000) {
+
+                                                                        break;
+                                                                }
+
+                                                                n++;
+
+                                                         }
+
+							 int speedindex = 0;
+
+							 for (int p = 0 ;p < columns.size() ; p++) {
+                        					if (columns.get(p).getName().equals("IAS")){
+                                 					speedindex = p;
+                        					}
+                					}
+
+
+                                                         Allautomatedphases.add(LN.checkgoaround(numOfRows, n , columns));
+							 Allautomatedphases.add(LN.checklanding(numOfRows, n , columns, speedindex));
+							 Humanannotations HCA  = new Humanannotations(manualannotationtext, "Landing");
                                                          humanPhases = HCA.getAnnotationsFor(manualannotationtext);
                                                          Validation vcA = new Validation(numOfRows,  Allautomatedphases, humanPhases);
 
 
-                                                         break;
+
+						         break;	 
 		 
 						default:break;
 					}	
